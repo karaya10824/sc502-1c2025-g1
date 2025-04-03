@@ -11,10 +11,27 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
-class ProductoController extends Controller{
-
-
+class PedidoController extends Controller{
     public function index(){
+        // Obtener todos los productos
+        $productos = Producto::all();
+        $categorias = Categoria::all();
+        $descuentos = Descuento::all();
+        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
+        return view('pedido.listado', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
+    }
+
+    public function indexAdd(){
+        // Obtener todos los productos
+        //$productos = Producto::all();
+        //$categorias = Categoria::all();
+        //$descuentos = Descuento::all();
+        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
+        return view('pedido.agregar');
+    }
+
+    public function vista(){
+        $user = auth()->guard('usuarios')->user();
 
         // Obtener todos los productos
         $productos = Producto::all();
@@ -22,7 +39,7 @@ class ProductoController extends Controller{
         $descuentos = Descuento::all();
 
         //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
-        return view('dashboard.Inventario', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
+        return view('pedido.agregar', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
     }
 
     public function create(Request $request){
@@ -60,33 +77,6 @@ class ProductoController extends Controller{
             'activo' => $request->activo
         ]);
 
-        return redirect('/producto');
-    }
-
-    public function destroy($id_producto){       
-        // Buscar el producto
-        $producto = Producto::find($id_producto);
-        // Eliminar el producto
-        $producto->delete();
-        return redirect('/producto');
-    }
-
-    public function update(Request $request, $id){
-        // Buscar el producto en la base de datos
-        $producto = Producto::find($id);
-
-        // Actualizar los campos con los nuevos valores
-        $producto->nombre_producto = $request->input('nombre_producto');
-        $producto->descripcion = $request->input('descripcion');
-        $producto->id_categoria = 4;
-        $producto->cantidad = $request->input('cantidad');
-        $producto->imagen = $request->input('imagen');
-        $producto->precio_costo = $request->input('precio_costo');
-        $producto->precio_venta = $request->input('precio_venta');
-        $producto->precio_por_mayor = $request->input('precio_por_mayor');
-        $producto->activo =  $request->input('activo');
-
-        $producto->save();
         return redirect('/producto');
     }
 }

@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateCategoriaRequest;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class CarritoController extends Controller{
-
+class UserController extends Controller{
+    public function index(){
+        return view('user.listado');
+    }
 }

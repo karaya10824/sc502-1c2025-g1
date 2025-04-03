@@ -8,6 +8,6 @@ use App\Http\Requests\UpdateCategoriaRequest;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
-class CarritoController extends Controller{
+class CategoriaGastoController extends Controller{
 
 }
