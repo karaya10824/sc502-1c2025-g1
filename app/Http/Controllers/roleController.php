@@ -28,6 +28,39 @@ class roleController extends Controller{
         return redirect('/roles');
     }
 
+    public function vistaModificar($id){
+        $role = Role::find($id);
+
+        $permisos = Permission::all();
+        return view('role.modificar', compact('role', 'permisos'));
+    }
+
+    public function update(Request $request, $id){
+        // Buscar el producto en la base de datos
+
+        try {
+            DB::beginTransaction();
+
+            //Actualizar rol
+            Role::where('id', $id)
+                ->update([
+                    'name' => $request->name
+                ]);
+            
+            $role = Role::find($id);
+
+            //Actualizar permisos
+            $role->syncPermissions($request->permission);
+
+            DB::commit();
+        } catch (Exception $e) {
+            dd($e);
+            DB::rollBack();
+        }
+
+        return redirect()->route('roles-vista');
+    }
+
     public function destroy($id){       
         // Buscar el producto
         $role = Role::find($id);
@@ -36,14 +69,4 @@ class roleController extends Controller{
         return redirect('/roles');
     }
 
-    public function update(Request $request, $id){
-        // Buscar el producto en la base de datos
-        $role = Role::find($id);
-
-        // Actualizar los campos con los nuevos valores
-        $role->name = $request->input('name');
-
-        $role->save();
-        return redirect('/roles');
-    }
 }

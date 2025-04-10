@@ -9,5 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 
 class CarritoController extends Controller{
-
+    public function index(){}
+    public function incrementar(){}
+    public function decrementar(){}
 }

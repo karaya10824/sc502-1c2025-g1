@@ -23,15 +23,15 @@ class PedidoController extends Controller{
 
     public function indexAdd(){
         // Obtener todos los productos
-        //$productos = Producto::all();
-        //$categorias = Categoria::all();
-        //$descuentos = Descuento::all();
+        $productos = Producto::all();
+        $categorias = Categoria::all();
+        $descuentos = Descuento::all();
+        
         //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
-        return view('pedido.agregar');
+        return view('pedido.agregar', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
     }
 
     public function vista(){
-        $user = auth()->guard('usuarios')->user();
 
         // Obtener todos los productos
         $productos = Producto::all();

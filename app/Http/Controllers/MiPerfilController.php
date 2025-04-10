@@ -9,5 +9,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 
 class MiPerfilController extends Controller{
-
+    public function index(){
+        return view('dashboard.miperfil');
+    }
 }
