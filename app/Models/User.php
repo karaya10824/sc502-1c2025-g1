@@ -27,8 +27,7 @@ class User extends Authenticatable
     'telefono',
     'numero_cedula',  
     'ruta_imagen',
-    'activo',
-    'roleType'];
+    'activo'];
 
     protected $hidden = [
         'password',
