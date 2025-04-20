@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Hash;
+=======
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -13,9 +16,14 @@ class UserController extends Controller{
     public function index(){
         $roles = Role::all();
         $Usuarios = User::all();
+<<<<<<< HEAD
         $active = "usuario";
 
         return view('usuario.listado', compact('Usuarios', 'roles', 'active'));
+=======
+
+        return view('user.listado', compact('Usuarios', 'roles'));
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
     }
 
     public function create(Request $request){
@@ -38,6 +46,7 @@ class UserController extends Controller{
         } catch (Exception $e) {
             DB::rollBack();
         }
+<<<<<<< HEAD
         return redirect()->route('usuarios-vista');
     }
 
@@ -71,5 +80,9 @@ class UserController extends Controller{
         $user->delete();
 
         return redirect()->route('usuarios-vista');
+=======
+
+        return route('usuarios-vista');
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
     }
 }
