@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
+<<<<<<< HEAD
 use App\Models\MetodoPago;
 use App\Models\CategoriaProducto;
 use App\Models\Descuento;
 use App\Models\Pedido;
 use App\Models\DetallePedido;
+=======
+use App\Models\Categoria;
+use App\Models\Descuento;
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +23,7 @@ class PedidoController extends Controller{
     public function index(){
         // Obtener todos los productos
         $productos = Producto::all();
+<<<<<<< HEAD
         $categorias = CategoriaProducto::all();
         $descuentos = Descuento::all();
         $pedidos = Pedido::with(['detallePedido.producto.media', 'metodoPago'])->get();
@@ -38,6 +44,33 @@ class PedidoController extends Controller{
         
         //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
         return view('pedido.agregar', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos, 'active' => $active, 'metodosPago' => $metodosPago]);
+=======
+        $categorias = Categoria::all();
+        $descuentos = Descuento::all();
+        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
+        return view('pedido.listado', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
+    }
+
+    public function indexAdd(){
+        // Obtener todos los productos
+        $productos = Producto::all();
+        $categorias = Categoria::all();
+        $descuentos = Descuento::all();
+        
+        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
+        return view('pedido.agregar', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
+    }
+
+    public function vista(){
+
+        // Obtener todos los productos
+        $productos = Producto::all();
+        $categorias = Categoria::all();
+        $descuentos = Descuento::all();
+
+        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
+        return view('pedido.agregar', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos]);
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
     }
 
     public function create(Request $request){
@@ -54,6 +87,7 @@ class PedidoController extends Controller{
             'activo' => 'required'
         ]);*/
 
+<<<<<<< HEAD
         $productos = json_decode($request->input('productos'), true);
         $cantidades = json_decode($request->input('cantidades'), true);
         $precios = json_decode($request->input('precios'), true);
@@ -105,5 +139,29 @@ class PedidoController extends Controller{
         $pedido->delete();
 
         return redirect()->route('pedidos-vista');
+=======
+
+        // Subir la imagen
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('imagenes', 'public');
+        } else {
+            $imagenPath = null;
+        }
+
+        // Obtener todos los productos
+        $productos = Producto::create([
+            'nombre_producto' => $request->nombre_producto,
+            'descripcion' => $request->descripcion,
+            'id_categoria' => 4,
+            'cantidad' => $request->cantidad,
+            'imagen' => $request->imagen,
+            'precio_costo' => $request->precio_costo,
+            'precio_venta' => $request->precio_venta,
+            'precio_por_mayor' => $request->precio_por_mayor,
+            'activo' => $request->activo
+        ]);
+
+        return redirect('/producto');
+>>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
     }
 }
