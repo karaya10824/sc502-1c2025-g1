@@ -111,6 +111,7 @@
         <section id="splide-slider" class="splide mx-auto border-t border-gray-200"> 
             <div class="splide__track">
                 <ul class="splide__list" style="height: auto;">
+                    @foreach ($Productos as $producto)
                     <li class="splide__slide">
                         <div class="splide__slide__container px-2 pb-6">
                             <div class="bg-white rounded-lg shadow-md overflow-hidden group">
@@ -120,133 +121,15 @@
                                 </div>
                                 <div class="p-4">
                                     <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
+                                        {{ $producto['nombre_producto'] }}
                                     </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
+                                    <p class="text-sm text-gray-500">{{ $producto['nombre_producto'] }}</p>
+                                    <span class="block text-black font-bold mt-2">{{ $producto['precio_venta_producto'] }}</span>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://icon.co.cr/cdn/shop/files/IMG-14858589.jpg?v=1727232516" alt="Producto" class="w-full h-80 transform transition duration-300 hover:scale-105 ">
-                                    <span class="absolute top-2 left-2 bg-red-500 text-white text-xs uppercase px-2 py-1 rounded">SALE</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide ">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://cr.tiendasishop.com/cdn/shop/files/IMG-1529010.jpg?v=1734375395&width=823" alt="Producto" class="w-full h-80 transform transition duration-300 hover:scale-105">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://nextcoshop.com/wp-content/uploads/2023/08/Magsafe.jpg" alt="Producto" class="w-full h-80 object-cover transition-transform group-hover:scale-105 duration-300">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://nextcoshop.com/wp-content/uploads/2023/08/Magsafe.jpg" alt="Producto" class="w-full h-80 object-cover transition-transform group-hover:scale-105 duration-300">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://nextcoshop.com/wp-content/uploads/2023/08/Magsafe.jpg" alt="Producto" class="w-full h-80 object-cover transition-transform group-hover:scale-105 duration-300">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://nextcoshop.com/wp-content/uploads/2023/08/Magsafe.jpg" alt="Producto" class="w-full h-80 object-cover transition-transform group-hover:scale-105 duration-300">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="splide__slide">
-                        <div class="splide__slide__container">
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                                <div class="relative">
-                                    <img src="https://nextcoshop.com/wp-content/uploads/2023/08/Magsafe.jpg" alt="Producto" class="w-full h-80 object-cover transition-transform group-hover:scale-105 duration-300">
-                                    <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                                        Nike Air Force 1
-                                    </h3>
-                                    <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                                    <span class="block text-black font-bold mt-2">$129.99</span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @endforeach
                 </ul>
 
 

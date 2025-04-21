@@ -4,19 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCaracteristicaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
-<<<<<<< HEAD
 use Illuminate\Http\Request;
 use App\Models\Gasto;
 use App\Models\CategoriaGasto;
-=======
->>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
 //use App\Models\*;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
 class GastoController extends Controller{
     public function index(){
-<<<<<<< HEAD
         $Categorias = CategoriaGasto::all();
         $Gastos = Gasto::with('categoriagasto')->get();
         $active = "gasto";
@@ -48,11 +44,5 @@ class GastoController extends Controller{
     public function modificar(){
 
         return view('gasto.listado');
-=======
-
-
-        //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
-        return view('dashboard.Gastos');
->>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
     }
 }

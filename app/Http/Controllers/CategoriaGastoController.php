@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCaracteristicaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
-<<<<<<< HEAD
 use App\Models\CategoriaGasto;
 use Illuminate\Http\Request;
 
@@ -40,12 +39,4 @@ class CategoriaGastoController extends Controller{
         $categoria->save();
         return redirect('/producto');
     }
-=======
-//use App\Models\*;
-use Exception;
-use Illuminate\Support\Facades\DB;
-
-class CategoriaGastoController extends Controller{
-
->>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
 }

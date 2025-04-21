@@ -36,9 +36,9 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'usuarios' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'usuarios',
         ],
     ],
 
@@ -60,15 +60,11 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+        'usuarios' => [
+           'driver' => 'eloquent',
+            'model' => App\Models\usuarios::class,
+            'username' => 'correo',
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

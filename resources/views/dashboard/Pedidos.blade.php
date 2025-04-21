@@ -4,13 +4,13 @@
 
 @section('principal')
 <!-- Contenido Principal -->
-<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg pt-16 p-6">
+<div class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg">
     <h2 class="text-2xl font-bold mb-4">Pedidos</h2>
 
     <!-- Tabs -->
     <div class="flex border-b">
-        <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:outline-none active-tab" data-tab="all">Todos</button>
-        <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:outline-none" data-tab="pending">Pendientes</button>
+        <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:border-green-500 focus:outline-none active-tab" data-tab="all">Todos</button>
+        <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:border-green-500 focus:outline-none" data-tab="pending">Pendientes</button>
         <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:outline-none" data-tab="completed">Completados</button>
         <button class="tab-button px-4 py-2 text-gray-600 border-b-2 border-transparent focus:outline-none" data-tab="cancelled">Cancelados</button>
     </div>
@@ -70,5 +70,7 @@
         </table>
     </div>
 </div>
+
+
 @endsection
 

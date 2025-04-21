@@ -13,32 +13,21 @@ class Usuario extends Authenticatable{
     }
 
     // Nombre de la tabla en la BD
-    protected $table = 'usuarios';
+    protected $table = 'FIDE_USUARIO_TB';
+
+    // Nombre de la clave primaria
+    protected $primaryKey = 'id_usuario';
 
     // Campos que se pueden llenar masivamente
     protected $fillable = [
-<<<<<<< HEAD
-        'username',
-        'password',
-        'nombre',  
-        'apellidos',
-        'email', 
-        'telefono',
-        'numero_cedula',  
-        'ruta_imagen',
-        'FK_id_estado'];
-=======
-    'username',
-    'password',
-    'nombre',  
-    'apellidos',
-    'correo', 
-    'telefono',
-    'numero_cedula',  
-    'ruta_imagen',
-    'activo',
-    'roleType'];
->>>>>>> 3f8e9f28ebb8491b648cfc1b552d646921f922e3
+        'identificacion_usuario',
+        'nombre_usuario_usuario',
+        'primer_Apellido_usuario',  
+        'segundo_Apellido_usuario',
+        'num_Telefono_usuario', 
+        'correo_electronico_usuario',
+        'contrasena_usuario',  
+        'fk_id_estado'];
 
     protected $hidden = [
         'password',

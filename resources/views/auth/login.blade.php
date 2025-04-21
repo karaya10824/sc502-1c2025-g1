@@ -8,7 +8,7 @@
             @csrf
             <div class="mb-4">
                 <label for="correo" class="block text-gray-700">Correo Electrónico</label>
-                <input type="email" id="email" name="correo" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+                <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" required>
             </div>
             <div class="mb-6">
                 <label for="password" class="block text-gray-700">Contraseña</label>

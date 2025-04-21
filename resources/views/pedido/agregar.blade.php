@@ -3,16 +3,21 @@
 @section('title', 'Agregar Pedido')
 
 @section('principal')
-<form class="pt-16" action="{{ route('pedidos-create') }}" method="post">
+<form class="" action="{{ route('pedidos-crear-manual') }}" method="post">
     @csrf
+    <input type="hidden" name="productos" id="productos">
+    <input type="hidden" name="cantidades" id="cantidades">
+    <input type="hidden" name="precios" id="precios">
+    <input type="hidden" name="descuentos" id="descuentos">
+
     <div class="container w-full mx-auto mt-4">
         <div class="grid grid-cols-2 gap-4"> <!-- Grid con 3 columnas y gap de 6 -->
             <!-- Detalles de la venta -->
-            <div class="col-span-1">
-                <div class="bg-gray-800 text-white text-center py-2 rounded-t-md">
+            <div class="col-span-1 bg-white">
+                <div class="bg-blue-500 text-white text-center py-2 rounded-t-md">
                     Detalles de la venta
                 </div>
-                <div class="p-6 border border-gray-800 rounded-b-md shadow-md">
+                <div class="p-6 rounded-b-md shadow-md">
                     <div class="grid grid-cols-1 gap-6">
                         <!-- Producto -->
                         <div class="mb-3">
@@ -20,7 +25,7 @@
                             <select name="productos[]" id="producto_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option value="" disabled selected> -</option>
                                 @foreach ($Productos as $producto)
-                                    <option value="{{$producto->id_producto}}-{{$producto->cantidad}}-{{$producto->precio_venta}}">
+                                    <option value="{{$producto->id_producto}}-{{$producto->cantidad_producto}}-{{$producto->precio_venta_producto}}">
                                         {{$producto->nombre_producto}}
                                     </option>
                                 @endforeach
@@ -32,14 +37,14 @@
                         <div class="flex justify-end">
                             <div class="w-full sm:w-1/2">
                                 <label for="disponible" class="block text-sm font-medium text-gray-700">Disponible</label>
-                                <input disabled id="disponible" type="text" class="block w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
+                                <input disabled id="cantidad_producto" type="text" class="block w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                             </div>
                         </div>
 
                         <!-- Precio de venta -->
                         <div>
-                            <label for="precio_venta" class="block text-sm font-medium text-gray-700">Precio de venta</label>
-                            <input disabled type="number" name="precio_venta" id="precio_venta" class="block w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300" step="0.1">
+                            <label for="precio_venta_producto" class="block text-sm font-medium text-gray-700">Precio de venta</label>
+                            <input disabled type="number" name="precio_venta_producto" id="precio_venta_producto" class="block w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300" step="0.1">
                         </div>
 
                         <!-- Cantidad -->
@@ -48,11 +53,6 @@
                             <input type="number" name="cantidad" id="cantidad" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                         </div>
 
-                        <!-- Descuento -->
-                        <div>
-                            <label for="descuento" class="block text-sm font-medium text-gray-700">Descuento</label>
-                            <input type="number" name="descuento" id="descuento" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-                        </div>
 
                         <!-- Botón para agregar -->
                         <div class="text-right">
@@ -65,18 +65,18 @@
                         <div>
                             <div class="overflow-x-auto">
                                 <table id="tabla_detalle" class="min-w-full bg-white border border-gray-200 rounded-md shadow-md">
-                                    <thead class="bg-gray-800 text-white">
+                                    <thead class="bg-gray-100">
                                         <tr>
-                                            <th class="px-4 py-2 text-left">#</th>
-                                            <th class="px-4 py-2 text-left">Producto</th>
-                                            <th class="px-4 py-2 text-left">Cantidad</th>
-                                            <th class="px-4 py-2 text-left">Precio venta</th>
-                                            <th class="px-4 py-2 text-left">Descuento</th>
-                                            <th class="px-4 py-2 text-left">Subtotal</th>
-                                            <th class="px-4 py-2"></th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">#</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Producto</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Cantidad</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Precio venta</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Descuento</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Subtotal</th>
+                                            <th class="px-2 py-3 text-center text-sm font-medium text-gray-700"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="divide-y divide-gray-300">
                                         <tr>
                                             <td class="px-4 py-2"></td>
                                             <td class="px-4 py-2"></td>
@@ -90,7 +90,8 @@
                                     <tfoot>
                                         <tr>
                                             <td></td>
-                                            <td colspan="4" class="px-4 py-2 text-right font-medium">Sumas</td>
+                                            <td colspan="4" class="px-4 py-2 text-right font-medium">Subtotal</td>
+                                            <input type="number" name="subtotal_pedido" id="subtotal_pedido" class="hidden">
                                             <td colspan="2" class="px-4 py-2"><span id="sumas">0</span></td>
                                         </tr>
                                         <tr>
@@ -102,7 +103,7 @@
                                             <td></td>
                                             <td colspan="4" class="px-4 py-2 text-right font-medium">Total</td>
                                             <td colspan="2" class="px-4 py-2">
-                                                <input type="hidden" name="total" value="0" id="inputTotal">
+                                                <input type="hidden" name="total_pedido" value="0" id="total_pedido">
                                                 <span id="total">0</span>
                                             </td>
                                         </tr>
@@ -122,20 +123,18 @@
                 </div>
             </div>
 
-            
-        
 
-            <div class="col-span-1">
-                <div class="bg-gray-800 text-white text-center py-2 rounded-t-md">
+            <div class="col-span-1 bg-white">
+                <div class="bg-blue-500 text-white text-center py-2 rounded-t-md">
                     Datos generales
                 </div>
-                <div class="p-6 border border-gray-800 rounded-b-md shadow-md">
+                <div class="p-6 border rounded-b-md shadow-md">
                     <div class="grid grid-cols-1 gap-6">
 
                         <!-- Número de comprobante -->
                         <div>
-                            <label for="numero_comprobante" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
-                            <input required type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
+                            <label for="nombre_cliente" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
+                            <input required type="text" name="nombre_cliente" id="nombre_cliente" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                             @error('numero_comprobante')
                                 <small class="text-red-500">{{ '*'.$message }}</small>
                             @enderror
@@ -150,13 +149,17 @@
                             @enderror
                         </div>
 
-                        <!-- Número de comprobante -->
+                        <!-- Método de Pago -->
                         <div>
-                            <label for="numero_comprobante" class="block text-sm font-medium text-gray-700">Método de Pago</label>
-                            <input required type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-                            @error('numero_comprobante')
-                                <small class="text-red-500">{{ '*'.$message }}</small>
-                            @enderror
+                            <label for="fk_id_metodo_de_pago" class="block text-sm font-medium text-gray-700">Método de Pago</label>
+                            <select name="fk_id_metodo_de_pago" id="metodo_de_pago" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                <option value="" disabled selected> -</option>
+                                @foreach ($metodosPago as $metodo)
+                                    <option value="{{$metodo->id_metodo_de_pago}}">
+                                        {{$metodo->detalle_metodo_de_pago}}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <!-- Número de comprobante -->
@@ -168,6 +171,19 @@
                             @enderror
                         </div>
 
+                        <!-- Descuento -->
+                        <div>
+                            <label for="fk_id_descuento" class="block text-sm font-medium text-gray-700">Descuento</label>
+                            <select name="fk_id_descuento" id="descuento_id" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                <option value="" disabled selected> -</option>
+                                @foreach ($Descuentos as $descuento)
+                                    <option value="{{$descuento->id_descuento}}">
+                                        {{$descuento->codigo_de_descuento}} - {{$descuento->porcentaje_descuento}}%
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Impuesto -->
                         <div>
                             <label for="impuesto" class="block text-sm font-medium text-gray-700">Impuesto (IVA)</label>
@@ -177,35 +193,33 @@
                             @enderror
                         </div>
 
-                        <!-- Impuesto -->
-                        <div>
-                            <label for="impuesto" class="block text-sm font-medium text-gray-700">Estado</label>
-                            <input readonly type="text" name="impuesto" id="impuesto" class="block w-full px-4 py-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
-                            @error('impuesto')
-                                <small class="text-red-500">{{ '*'.$message }}</small>
-                            @enderror
+                        <!-- Detalles de la Compra -->
+                        <div class="mb-4">
+                            <label for="fk_id_estado" class="block text-gray-700">Estado</label>
+                            <select id="fk_id_estado" name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
+                                <option value="3">Completado</option>
+                                <option value="4">Pendiente</option>
+                                <option value="5">Cancelado</option>
+                            </select>
                         </div>
 
                         <!-- Detalles de la Compra -->
                         <div>
-                            <label for="impuesto" class="block text-sm font-medium text-gray-700">Detalles</label>
-                            <textarea type="text" name="impuesto" id="impuesto" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300"></textarea>
-                            @error('impuesto')
-                                <small class="text-red-500">{{ '*'.$message }}</small>
-                            @enderror
+                            <label for="detalle_pedido" class="block text-sm font-medium text-gray-700">Detalles</label>
+                            <textarea type="text" name="detalle_pedido" id="detalle_pedido" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300"></textarea>
                         </div>
 
                         <!-- Fecha -->
                         <div class="col-sm-6">
                             <label for="fecha" class="form-label">Fecha:</label>
-                            <input readonly type="date" name="fecha" id="fecha" class="form-control border-success" value="<?php echo date("Y-m-d") ?>">
+                            <input readonly type="date" name="fecha_pedido" id="fecha" class="form-control border-success" value="<?php echo date("Y-m-d") ?>">
                             <?php
 
                             use Carbon\Carbon;
 
                             $fecha_hora = Carbon::now()->toDateTimeString();
                             ?>
-                            <input type="hidden" name="fecha_hora" value="{{$fecha_hora}}">
+                            <input type="hidden" name="fecha_pedido" value="{{$fecha_hora}}">
                         </div>
 
                         <!-- Usuario -->
@@ -268,34 +282,31 @@
 
     function mostrarValores() {
         let dataProducto = document.getElementById('producto_id').value.split('-');
-        $('#disponible').val(dataProducto[1]);
-        $('#precio_venta').val(dataProducto[2]);
+        $('#cantidad_producto').val(dataProducto[1]);
+        $('#precio_venta_producto').val(dataProducto[2]);
     }
 
     function agregarProducto() {
         let dataProducto = document.getElementById('producto_id').value.split('-');
-        console.log($('#producto_id option:selected').text());
         //Obtener valores de los campos
         let idProducto = dataProducto[0];
         let nameProducto = $('#producto_id option:selected').text();
-        let cantidad = $('#cantidad').val();
-        let precioVenta = $('#precio_venta').val();
+        let cantidad_producto = $('#cantidad_producto').val();
+        let precioVenta = $('#precio_venta_producto').val();        
         let descuento = $('#descuento').val();
-        let disponible = $('#disponible').val();
-
+        let cantidad = $('#cantidad').val();
+        descuento = 0;
         if (descuento == '') {
             descuento = 0;
         }
-
         //Validaciones 
         //1.Para que los campos no esten vacíos
         if (idProducto != '' && cantidad != '') {
-
             //2. Para que los valores ingresados sean los correctos
             if (parseInt(cantidad) > 0 && (cantidad % 1 == 0) && parseFloat(descuento) >= 0) {
 
                 //3. Para que la cantidad no supere el stock
-                if (parseInt(cantidad) <= parseInt(disponible)) {
+                if (parseInt(cantidad) <= parseInt(cantidad_producto)) {
                     //Calcular valores
                     subtotal[cont] = round(cantidad * precioVenta - descuento);
                     sumas += subtotal[cont];
@@ -310,11 +321,14 @@
                         '<td><input type="hidden" name="arrayprecioventa[]" value="' + precioVenta + '">' + precioVenta + '</td>' +
                         '<td><input type="hidden" name="arraydescuento[]" value="' + descuento + '">' + descuento + '</td>' +
                         '<td>' + subtotal[cont] + '</td>' +
-                        '<td><button class="btn btn-danger" type="button" onClick="eliminarProducto(' + cont + ')"><i class="fa-solid fa-trash">ds</i></button></td>' +
+                        '<td><button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-700 transition" type="button" onClick="eliminarProducto(' + cont + ')"><i class="fa-solid fa-trash"></i></button></td>' +
                         '</tr>';
 
                     //Acciones después de añadir la fila
                     $('#tabla_detalle').append(fila);
+
+                    // Actualizar los campos ocultos
+                    actualizarCamposOcultos();
                     limpiarCampos();
                     cont++;
                     disableButtons();
@@ -322,6 +336,8 @@
                     //Mostrar los campos calculados
                     $('#sumas').html(sumas);
                     $('#igv').html(igv);
+                    document.getElementById('subtotal_pedido').value = sumas;  
+                    document.getElementById('total_pedido').value = total;                   
                     $('#total').html(total);
                     $('#impuesto').val(igv);
                     $('#inputTotal').val(total);
@@ -337,6 +353,34 @@
             showModal('Le faltan campos por llenar');
         }*/
 
+    }
+
+    function actualizarCamposOcultos() {
+        let productos = [];
+        let cantidades = [];
+        let precios = [];
+        let descuentos = [];
+
+        // Recorrer las filas de la tabla y obtener los valores
+        $('#tabla_detalle tbody tr').each(function() {
+            let idProducto = $(this).find('input[name="arrayidproducto[]"]').val();
+            let cantidad = $(this).find('input[name="arraycantidad[]"]').val();
+            let precio = $(this).find('input[name="arrayprecioventa[]"]').val();
+            let descuento = $(this).find('input[name="arraydescuento[]"]').val();
+
+            if (idProducto) {
+                productos.push(idProducto);
+                cantidades.push(cantidad);
+                precios.push(precio);
+                descuentos.push(descuento);
+            }
+        });
+
+        // Actualizar los campos ocultos
+        $('#productos').val(JSON.stringify(productos));
+        $('#cantidades').val(JSON.stringify(cantidades));
+        $('#precios').val(JSON.stringify(precios));
+        $('#descuentos').val(JSON.stringify(descuentos));
     }
 
     function eliminarProducto(indice) {
@@ -404,11 +448,12 @@
 
     function limpiarCampos() {
         let select = $('#producto_id');
-
-        $('#cantidad').val('');
-        $('#precio_venta').val('');
+        
+        $('#producto_id').val('').trigger('change');
+        $('#cantidad_producto').val('');
+        $('#precio_venta_producto').val('');
         $('#descuento').val('');
-        $('#disponible').val('');
+        $('#cantidad').val('');
     }
 
     function showModal(message, icon = 'error') {
