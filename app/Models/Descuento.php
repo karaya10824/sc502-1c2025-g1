@@ -23,5 +23,10 @@ class Descuento extends Model{
     // Si la tabla no tiene timestamps (created_at, updated_at)
     public $timestamps = false;
 
+
+    public function estado(){
+        return $this->belongsTo(Estado::class, 'fk_id_estado', 'id_estado');
+    }
+
     //
 }

@@ -9,9 +9,7 @@
         <div class="w-auto flex flex-col">
             <form action="{{ route('pedidos-crear-vista') }}">
                 <div class="flex flex-row gap-2">
-                    <button type="submit" class="w-auto px-5 h-10 mb-5 bg-purple-500 text-white font-semibold border border-indigo rounded-md hover:bg-purple-900 hover:text-white transition duration-300">Agregar Pedido</button>
-                    <button class="w-auto px-5 h-10 mb-5 bg-gray-200 text-white font-semibold border border-indigo rounded-md hover:bg-indigo-900 hover:text-white transition duration-300">Agregar Pedido</button>
-                </div>
+                    <button type="submit" class="w-auto px-5 h-10 mb-5 bg-purple-500 text-white font-semibold border border-indigo rounded-md hover:bg-purple-900 hover:text-white transition duration-300">Agregar Pedido</button>                </div>
             </form>
         </div>
         <h2 class="text-2xl font-bold mb-4">Pedidos</h2>
@@ -27,34 +25,45 @@
 
         <!-- Tabla de Pedidos -->
         <div class="max-w-7xl mx-auto">
-
             <div class="bg-white shadow rounded-lg">
             <div class="overflow-x-auto">
                 <table class="min-w-full table-auto">
                 <thead class="bg-gray-100">
                     <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">#</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Fecha</th>
+                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Fecha</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Cliente</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Envio</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Metodo de Pago</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Total</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Estado</th>
+                    <th class="px-2 py-3 text-left text-sm font-medium text-gray-700">Total</th>
+                    <th class="px-2 py-3 text-left text-sm font-medium text-gray-700">Estado</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="ordersTable">
                     <!-- Order Row -->
                     @foreach ($Pedidos as $pedido)
+                    <?php 
+                        if($pedido->fk_id_estado == 3){
+                            $estilosBoton = "bg-green-100 text-green-600";
+                            $estado = 'Completado';
+                        }else if($pedido->fk_id_estado == 4){
+                            $estilosBoton = "bg-purple-100 text-purple-600";
+                            $estado = 'Pendiente';
+                        }else{
+                            $estilosBoton = "bg-red-100 text-red-600";
+                            $estado = 'Cancelado';
+                        }                            
+                    ?>
                     <tr class="order-row bg-white border-b hover:bg-gray-50" data-status="{{ $pedido->fk_id_estado }}">
                         <td class="px-6 py-4">{{ $pedido->id_pedido }}</td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($pedido->fecha_pedido)->format('d/m/Y') }}</td>
+                        <td class="px-4 py-4">{{ \Carbon\Carbon::parse($pedido->fecha_pedido)->format('d/m/Y') }}</td>
                         <td class="px-6 py-4 text-blue-600">{{ $pedido->cliente->nombre_cliente ?? 'No especificado'}}</td>
                         <td class="px-6 py-4">{{ $pedido->fk_id_cliente ?? 'N/A' }}</td>
                         <td class="px-6 py-4">{{ $pedido->metodoPago->detalle_metodo_de_pago ?? 'No especificado' }}</td>
-                        <td class="px-6 py-4">₡{{ $pedido->total_pedido }} <span class="bg-black text-white px-2 py-1 rounded-full text-xs ml-1">13%</span></td>
-                        <td class="px-6 py-4">
-                            <span class="px-2 py-1 text-xs bg-red-100 text-red-600 rounded-full">Cancelado</span>
+                        <td class="px-2 py-4">₡{{ number_format($pedido->total_pedido, 0, '.', ',') }} @if($pedido->fk_id_descuento != 0) <span class="bg-black text-white px-2 py-1 rounded-full text-xs ml-1">{{ $pedido->descuento->porcentaje_descuento ?? 'No especifiado' }}%</span> @endif</td>
+                        <td class="px-2 py-4">
+                            <span class="px-2 py-1 text-xs {{ $estilosBoton }} bg-red-100 text-red-600 rounded-full">{{ $estado }}</span>
                         </td>
 
                         <td class="py-3 px-4 flex gap-2 justify-center">
@@ -79,14 +88,21 @@
                                 <div class="flex flex-col gap-4">
                                 @foreach ($pedido->detallePedido as $detalle)
                                     @if($detalle->pedido->id_pedido == $pedido->id_pedido)
-                                    <div>
-                                        <img src="{{ $detalle->producto->getFirstMediaUrl('imagenes')  }}" class="h-20 w-20 object-cover rounded-lg shadow-md" alt="">
-                                        <div class="text-sm font-medium">{{ $detalle->producto->nombre_producto ?? 'Producto no encontrado'}}</div>
-                                        <div class="text-sm text-gray-600">Cantidad: {{ $detalle->cantidad }}, Precio: {{ $detalle->producto->precio_venta_producto ?? 'Producto no encontrado'}}</div>
+                                    <div class="flex items-center gap-4">
+                                        <div class="">
+                                            @foreach ($detalle->producto->media as $media)
+                                                <img src="{{ $media->getUrl() }}" class="h-20 w-20 object-cover rounded-lg shadow-md" alt="">
+                                                @break
+                                            @endforeach
+                                        </div>
+                                        <div class="text">
+                                            <div class="text-sm font-medium">{{ $detalle->producto->nombre_producto ?? 'Producto no encontrado'}}</div>
+                                            <div class="text-sm text-gray-600">Cantidad: {{ $detalle->cantidad }}, Precio: ₡{{ number_format($detalle->producto->precio_venta_producto, 0, '.', ',') ?? 'Producto no encontrado'}}</div>
+                                        </div>
                                     </div>
                                     @endif
                                 @endforeach
-                                <div class="text-sm font-semibold text-right">Subtotal: ₡{{ $pedido->subtotal_pedido }}, Descuento: {{ $pedido->descuento ?? 'Sin Descuento'}}, Total: ₡{{ $pedido->total_pedido }}</div>
+                                <div class="text-sm font-semibold text-right">Subtotal: ₡{{ number_format($pedido->subtotal_pedido, 0, '.', ',') ?? 'Producto no encontrado'  }}, Descuento: ₡{{ $pedido->descuento ? number_format($pedido->descuento->porcentaje_descuento * $pedido->subtotal_pedido / 100, 0, '.', ',') : 'Sin Descuento' }}, Total: ₡{{  number_format($pedido->total_pedido, 0, '.', ',') ?? 'Producto no encontrado' }}</div>
                                 </div>
                             </td>
                         </tr>

@@ -4,8 +4,8 @@
 
 @section('contentt')
 
-    <!-- Overlay oscuro -->
-    <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden"></div>
+<!-- Overlay oscuro -->
+<div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden"></div>
 
 
 <!-- Pestaña modal de Filtrar -->
@@ -85,9 +85,9 @@
 </div>
 
 <header class="mt-auto w-100 bg-gray-200 py-20 text-center text-black"> 
-        <label for="address" class="block text-gray-700 font-semibold mb-2">Buscar Producto</label>
-        <input type="text" id="address" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"> 
-    </header>
+    <label for="address" class="block text-gray-700 font-semibold mb-2">Buscar Producto</label>
+    <input type="text" id="address" class="w-1/2 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"> 
+</header>
 
 
     
@@ -126,86 +126,30 @@
                     </svg>
                 </div>
                 <button id="filter-button" class="bg-black p-2 text-white hover:text-gray-200">
-                    
                     <a>Filtrar</a>
                 </button>
             </div>
 
-            <div class="w-full mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            <div class="w-full mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 mt-2 lg:grid-cols-3 gap-6">
                 <!-- Tarjeta de Producto -->
+                @foreach ($Productos as $producto)
                 <div class=" bg-white rounded-lg shadow-md overflow-hidden group">
                     <div class="relative">
-                        <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto" class="w-full h-3/4 object-cover transition-transform group-hover:scale-105 duration-300">
+                        @foreach ($producto->media as $media)
+                            <a href="{{ url('/producto/' . $producto->id_producto) }}"><img src="{{ $media->getUrl() }}" alt="Producto" class="w-full h-3/4 transform transition duration-300 hover:scale-105"></a>
+                        @break
+                        @endforeach
                         <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                            Nike Air Force 1
+                            {{ $producto['nombre_producto'] }}
                         </h3>
-                        <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                        <span class="block text-black font-bold mt-2">$129.99</span>
+                        <p class="text-sm text-gray-500">{{ $producto['nombre_producto'] }}</p>
+                        <span class="block text-black font-bold mt-2">₡{{ number_format($producto['precio_venta_producto'], 0, '.', ',') ?? 'Producto no encontrado'  }}</span>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                    <div class="relative">
-                        <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto" class="w-full h-1/3 object-cover transition-transform group-hover:scale-105 duration-300">
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs uppercase px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                            Nike Air Force 1
-                        </h3>
-                        <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                        <span class="block text-black font-bold mt-2">$129.99</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                    <div class="relative">
-                        <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto" class="w-full h-3/4 object-cover transition-transform group-hover:scale-105 duration-300">
-                        <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                            Nike Air Force 1
-                        </h3>
-                        <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                        <span class="block text-black font-bold mt-2">$129.99</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                    <div class="relative">
-                        <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto" class="w-full h-1/3 transform transition duration-300 hover:scale-105 ">
-                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs uppercase px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                            Nike Air Force 1
-                        </h3>
-                        <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                        <span class="block text-black font-bold mt-2">$129.99</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden group">
-                    <div class="relative">
-                        <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto" class="w-full h-3/4 transform transition duration-300 hover:scale-105 ">
-                        <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-800 group-hover:text-gray-600 transition duration-300">
-                            Nike Air Force 1
-                        </h3>
-                        <p class="text-sm text-gray-500">Zapatillas clásicas de mujer.</p>
-                        <span class="block text-black font-bold mt-2">$129.99</span>
-                    </div>
-                </div>
-
-
-                
-                <!-- Duplicar más tarjetas aquí -->
+                @endforeach
             </div>
 
             <!-- Sección de productos -->

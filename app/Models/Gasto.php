@@ -29,6 +29,6 @@ class Gasto extends Model
 
     //Relaciones con otras tablas
     public function categoriagasto(){
-        return $this->belongsTo(CategoriaGasto::class, 'fk_id_categoria_gasto');
+        return $this->belongsTo(CategoriaGasto::class, 'fk_id_categoria_gasto', 'id_categoria_gasto');
     }
 }

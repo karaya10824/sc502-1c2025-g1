@@ -5,10 +5,10 @@
     <div class="container">
         <div class="flex h-full">
             <!-- Sidebar -->
-            <div class="h-full w-48 bg-gray-100 p-4 space-y-4">
+            <div class="h-full w-48 bg-gray-200 p-4 space-y-4">
                 <h2 class="text-lg font-semibold">Configuración</h2>
                 <nav class="space-y-2">
-                    <button class="w-full text-left px-2 py-2 rounded-lg hover:bg-gray-200" onclick="showTab('profile')">
+                    <button class="w-full text-left px-2 py-2 rounded-lg hover:bg-gray-300" onclick="showTab('profile')">
                         Perfil
                     </button>
                     <button class="w-full text-gray-500 text-left px-2 py-2 rounded-lg"> <!-- onclick="showTab('security') -->
@@ -27,7 +27,7 @@
             <div class="flex-1 pt-4">
                 <!-- Perfil -->
                 <div id="profile" class="tab-content">
-                    <div class="bg-white shadow-md rounded-lg p-6">
+                    <div class=" p-6">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-xl font-semibold">Mi Perfil</h2>
                             <a href="{{ url('/usuarios/modificar/' . auth()->user()->id) }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition">
@@ -37,7 +37,7 @@
                         <div class="flex items-center space-x-6 mb-6">
                             <!-- Imagen del usuario -->
                             <div class="w-24 h-24">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7awcQZRnbrToH9Hwkh9NsbbAlGThRcfHvCA&s" alt="Imagen del usuario" class="w-full h-full rounded-full object-cover">
+                                <img src="{{ Auth::user()->ruta_imagen ? asset('storage/' . Auth::user()->ruta_imagen) : asset('images/default-user.png') }}" alt="Imagen del usuario" class="w-full h-full rounded-full object-cover">
                             </div>
                         </div>
 
@@ -90,7 +90,7 @@
                         <div class="flex items-center space-x-6 mb-6">
                             <!-- Imagen del usuario -->
                             <div class="w-24 h-24">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7awcQZRnbrToH9Hwkh9NsbbAlGThRcfHvCA&s" alt="Imagen del usuario" class="w-full h-full rounded-full object-cover">
+                                <img src="{{ Auth::user()->ruta_imagen ? asset('storage/' . Auth::user()->ruta_imagen) : asset('images/default-user.png') }}" alt="Imagen del usuario" class="w-full h-full rounded-full object-cover">
                             </div>
                         </div>
 

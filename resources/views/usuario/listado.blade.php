@@ -65,7 +65,7 @@
 
 <!--Pestaña Modal para Agregar Usuario-->
 <div id="modalAgregarUser" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/2">
+    <div class="bg-white rounded-lg shadow-lg w-3/4 h-3/4 overflow-y-auto">
         <div class="flex justify-between items-center bg-gray-800 text-white px-4 py-2 rounded-t-lg">
             <h3 class="text-lg font-semibold">Agregar Usuario</h3>
             <button id="closeModal" class="text-white">&times;</button>
@@ -87,14 +87,33 @@
                 </div>
                 <div class="mb-4">
                     <label for="PASSWORD" class="block text-gray-700">Contraseña</label>
-                    <input type="text" id="password" name="password" class="w-full px-3 py-2 border rounded-lg" required>
+                    <input type="password" id="password" name="password" class="w-full px-3 py-2 border rounded-lg" required>
                 </div>
 
+
+                <div class="mb-4">
+                    <label for="imagen" class="block text-gray-700">Imagen del Usuario</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="imagen" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18M3 12h18m-6 4v4m0-4v-4"></path>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click para subir imagen</span> o arrastra aquí</p>
+                                <p class="text-xs text-gray-500">PNG, JPG, JPEG (máx. 5MB)</p>
+                            </div>
+                            <input id="imagen" name="imagen" type="file" class="hidden" accept="image/*" onchange="previewImage(event)">
+                        </label>
+                    </div>
+                    <div class="mt-4">
+                        <img id="preview" class="hidden w-32 h-32 object-cover rounded-full shadow-md" alt="Previsualización de la imagen">
+                    </div>
+                </div>
                 <!---Roles---->
                 <div class="row mb-4">
                     <label for="role" class="col-lg-2 col-form-label">Rol:</label>
                     <div class="col-lg-4">
-                        <select name="role" id="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" aria-labelledby="rolHelpBlock">
+                        <select name="role" id="role" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" aria-labelledby="rolHelpBlock">
                             <option value="" selected disabled>Seleccione:</option>
                             @foreach ($roles as $item)
                                 <option value="{{$item->name}}" @selected(old('role')==$item->name)>{{$item->name}}</option>
@@ -120,6 +139,21 @@
 
 
 <script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }   
     //// Ventana modal Rol
     document.getElementById('btnAgregarUser').addEventListener('click', function() {
         document.getElementById('modalAgregarUser').classList.remove('hidden');

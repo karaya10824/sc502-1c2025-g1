@@ -44,6 +44,7 @@
                                     <tr>
                                     <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Nombre</th>
                                     <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Descripción</th>
+                                    <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Categoria</th>
                                     <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Cantidad</th>
                                     <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Precio de Costo</th>
                                     <th class="px-2 py-3 text-center text-sm font-medium text-gray-700">Precio de Venta</th>
@@ -58,10 +59,11 @@
                                 <tr class="hover:bg-gray-100 text-center transition">
                                         <td class="py-3 px-2 text-center"><?php echo $producto['nombre_producto']; ?></td>
                                         <td class="py-3 px-2 text-center"><?php echo $producto['descripcion_producto']; ?></td>
+                                        <td class="py-3 px-2 text-center">{{ $producto->categoria->nombre_categoria ?? 'Sin Categoria'}}</td>
                                         <td class="py-3 px-2 text-center"><?php echo $producto['cantidad_producto']; ?></td>
-                                        <td class="py-3 px-2 text-center">₡<?php echo $producto['precio_costo_producto']; ?></td>
-                                        <td class="py-3 px-2 text-center">₡<?php echo $producto['precio_venta_producto']; ?></td>
-                                        <td class="py-3 px-2 text-center">₡<?php echo $producto['precio_por_mayor_producto'];?></td>
+                                        <td class="py-3 px-2 text-center">₡{{ number_format($producto->precio_costo_producto, 0, '.', ',') }}</td>
+                                        <td class="py-3 px-2 text-center">₡{{ number_format($producto->precio_venta_producto, 0, '.', ',') }}</td>
+                                        <td class="py-3 px-2 text-center">₡{{ number_format($producto->precio_por_mayor_producto, 0, '.', ',') }} </td>
                                         
                                         <td class="py-3 px-2 text-center text-green-600 font-semibold"> <span class="px-2 py-1 text-xs rounded-full <?php echo $producto['fk_id_estado'] == 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>"><?php echo $producto['fk_id_estado'] == 1 ? 'Activa' : 'Inactiva'; ?></span></td>
                                         <td class="py-3 px-2 text-center">
@@ -73,9 +75,9 @@
                                         </td>
 
                                         <td class="py-3 px-4 flex gap-2 justify-center">
-                                            <button href="#" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarProducto" data-id="<?php echo $producto['id_producto']; ?>" data-nombre="<?php echo $producto['nombre_producto']; ?>" data-descripcion="<?php echo $producto['descripcion_producto']; ?>" data-cantidad="<?php echo $producto['cantidad_producto']; ?>" data-precio-costo="<?php echo $producto['precio_costo_producto']; ?>" data-precio-venta="<?php echo $producto['precio_venta_producto']; ?>" data-precio-mayor="<?php echo $producto['precio_por_mayor_producto']; ?>" data-activo="<?php echo $producto['fk_id_estado']; ?>" data-imagen="<?php echo $producto['imagen']; ?>">
+                                            <a href="{{ url('/producto/modificar/' . ($producto['id_producto'] ?? '')) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition" data-id="<?php echo $producto['id_producto']; ?>" data-nombre="<?php echo $producto['nombre_producto']; ?>" data-descripcion="<?php echo $producto['descripcion_producto']; ?>" data-cantidad="<?php echo $producto['cantidad_producto']; ?>" data-precio-costo="<?php echo $producto['precio_costo_producto']; ?>" data-precio-venta="<?php echo $producto['precio_venta_producto']; ?>" data-precio-mayor="<?php echo $producto['precio_por_mayor_producto']; ?>" data-activo="<?php echo $producto['fk_id_estado']; ?>" data-imagen="<?php echo $producto['imagen']; ?>">
                                                 <i class="fas fa-pencil"></i>
-                                            </button>
+                                            </a>
                                             <form action="{{ url('/producto/eliminar/' . $producto['id_producto']) }}" method="post">
                                             @csrf
                                             @method('DELETE')
@@ -129,9 +131,9 @@
                                             <td class="py-3 px-2 text-center"><?php echo $categoria['descripcion_categoria']; ?></td>
                                             <td class="py-3 px-2 text-center text-green-600 font-semibold"> <span class="px-2 py-1 text-xs rounded-full <?php echo $categoria['fk_id_estado'] == 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>"><?php echo $categoria['fk_id_estado'] == 1 ? 'Activa' : 'Inactiva'; ?></span></td>
                                             <td class="py-3 px-4 flex gap-2 justify-center">
-                                                <button class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarCategoria" data-id="<?php echo $categoria['id_categoria_prod']; ?>" data-nombre="<?php echo $categoria['nombre_categoria']; ?>" data-descripcion="<?php echo $categoria['descripcion_categoria']; ?>" data-activo="<?php echo $categoria['fk_id_estado']; ?>">
+                                                <a href="{{ url('/categoria/modificar/' . ($categoria['id_categoria_prod'] ?? '')) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition">
                                                     <i class="fas fa-pencil"></i>
-                                                </button>
+                                                </a>
                                                 <form action="{{ url('/categoria/eliminar/' . $categoria['id_categoria_prod']) }}" method="post">
                                                     @csrf
                                                     @method('DELETE')
@@ -186,9 +188,9 @@
                                             <td class="py-3 px-4 text-center"><?php echo $descuento['porcentaje_descuento']; ?>%</td>
                                             <td class="py-3 px-2 text-center text-green-600 font-semibold"> <span class="px-2 py-1 text-xs rounded-full <?php echo $descuento['fk_id_estado'] == 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>"><?php echo $descuento['fk_id_estado'] == 1 ? 'Activa' : 'Inactiva'; ?></span></td>
                                             <td class="py-3 px-4 flex gap-2 justify-center">
-                                                <button class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarDescuento" data-id="<?php echo $descuento['id_descuento']; ?>" data-porcentaje="<?php echo $descuento['porcentaje_descuento']; ?>" data-codigo="<?php echo $descuento['codigo_de_descuento']; ?>" data-descripcion="<?php echo $descuento['descripcion_descuento']; ?>" data-activo="<?php echo $descuento['fk_id_estado']; ?>">
+                                                <a href="{{ url('/descuento/modificar/' . ($descuento['id_descuento'] ?? '')) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition">
                                                     <i class="fas fa-pencil"></i>
-                                                </button>
+                                                </a>
                                                 <form action="{{ url('/descuento/eliminar/' . $descuento['id_descuento']) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
@@ -237,6 +239,19 @@
                     <label for="descripcion_producto" class="block text-gray-700">Descripción</label>
                     <textarea id="descripcion_producto" name="descripcion_producto" class="w-full px-3 py-2 border rounded-lg"></textarea>
                 </div>
+
+                <!-- Categoria -->
+                <div>
+                    <label for="telefono" class="block text-sm font-medium text-gray-700">Categoria</label>
+                    <select name="fk_id_categoria_prod" id="producto_id" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        @foreach ($Categorias as $categoria)
+                            <option value="{{$categoria->id_categoria_prod}}">
+                                {{$categoria->nombre_categoria}}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                 
                 <div class="mb-4">
                     <label for="cantidad_producto" class="block text-gray-700">Cantidad</label>
                     <input type="number" id="cantidad_producto" name="cantidad_producto" class="w-full px-3 py-2 border rounded-lg" required>
@@ -261,8 +276,22 @@
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="imagen" class="block text-gray-700">Imagen</label>
-                    <input type="file" id="imagen" name="imagenes[]" class="w-full px-3 py-2 border rounded-lg" multiple>
+                    <label for="imagenes" class="block text-gray-700">Imágenes del Producto</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="imagenes" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18M3 12h18m-6 4v4m0-4v-4"></path>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click para subir imágenes</span> o arrastra aquí</p>
+                                <p class="text-xs text-gray-500">PNG, JPG, JPEG (máx. 5MB por imagen)</p>
+                            </div>
+                            <input id="imagenes" name="imagenes[]" type="file" class="hidden" accept="image/*" multiple onchange="previewImages(event)">
+                        </label>
+                    </div>
+                    <div id="preview-container" class="mt-4 grid grid-cols-6 gap-2">
+                        <!-- Aquí se mostrarán las imágenes previsualizadas -->
+                    </div>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" id="cancelarModal" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
@@ -273,63 +302,6 @@
     </div>
 </div>
 <!-- Fin Pestaña Modal para Agregar Producto-->
-
-<!-- Pestaña Modal para modificar producto -->
-<div id="modalModificarProducto" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/2">
-        <div class="flex justify-between items-center bg-gray-800 text-white px-4 py-2 rounded-t-lg">
-            <h3 class="text-lg font-semibold">Modificar Producto</h3>
-            <button id="closeModalModificar" class="text-white">&times;</button>
-        </div>
-        <div class="p-6">
-            <form id="formModificarProducto" method="post" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="id_producto" name="id_producto">
-                <div class="mb-4">
-                    <label for="nombre_producto_mod" class="block text-gray-700">Nombre del Producto</label>
-                    <input type="text" id="nombre_producto_mod" name="nombre_producto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="descripcion_mod" class="block text-gray-700">Descripción</label>
-                    <textarea id="descripcion_mod" name="descripcion_producto" class="w-full px-3 py-2 border rounded-lg"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="cantidad_mod" class="block text-gray-700">Cantidad</label>
-                    <input type="number" id="cantidad_mod" name="cantidad_producto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="precio_costo_mod" class="block text-gray-700">Precio de Costo</label>
-                    <input type="number" id="precio_costo_mod" name="precio_costo_producto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="precio_venta_mod" class="block text-gray-700">Precio de Venta</label>
-                    <input type="number" id="precio_venta_mod" name="precio_venta_producto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="precio_por_mayor_mod" class="block text-gray-700">Precio por Mayor</label>
-                    <input type="number" id="precio_por_mayor_mod" name="precio_por_mayor_producto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="fk_id_estado" class="block text-gray-700">Estado</label>
-                    <select id="fk_id_estado" name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
-                        <option value="1">Activo</option>
-                        <option value="2">Inactivo</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="imagen" class="block text-gray-700">Imagen</label>
-                    <input type="file" id="imagen" name="imagenes[]" class="w-full px-3 py-2 border rounded-lg" multiple>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" id="cancelarModalModificar" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Modificar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Fin Pestaña Modal para modificar producto -->
 
 <!--Pestaña Modal para Agregar Categoria-->
 <div id="modalAgregarCategoria" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
@@ -365,44 +337,7 @@
     </div>
 </div>
 <!-- Fin Pestaña Modal para Agregar Categoria-->
-
-<!-- Pestaña Modal para modificar Categoria -->
-<div id="modalModificarCategoria" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/2">
-        <div class="flex justify-between items-center bg-gray-800 text-white px-4 py-2 rounded-t-lg">
-            <h3 class="text-lg font-semibold">Modificar Categoria</h3>
-            <button id="closeModalModificarC" class="text-white">&times;</button>
-        </div>
-        <div class="p-6">
-            <form action="{{ url('/categoria/modificar/' . ($categoria['id_categoria_prod'] ?? '')) }}" method="post" id="formModificarCategoria">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="id_categoria_prod" name="id_categoria_prod">
-                <div class="mb-4">
-                    <label for="nombre_categoria_mod" class="block text-gray-700">Nombre de Categoria</label>
-                    <input type="text" id="nombre_categoria_mod" name="nombre_categoria" class="w-full px-3 py-2 border rounded-lg" required>
-                </div>
-                <div class="mb-4">
-                    <label for="descripcion_categoria_mod" class="block text-gray-700">Descripción de Categoria</label>
-                    <textarea id="descripcion_categoria_mod" name="descripcion_categoria" class="w-full px-3 py-2 border rounded-lg"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="fk_id_estado" class="block text-gray-700">Estado</label>
-                    <select id="fk_id_estado_mod" name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
-                        <option value="1">Activo</option>
-                        <option value="2">Inactivo</option>
-                    </select>
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" id="cancelarModalModificarC" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Modificar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Fin Pestaña Modal para modificar Categoria -->
-
+ 
 <!--Pestaña Modal para Agregar Descuento-->
 <div id="modalAgregarDescuento" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-lg shadow-lg w-1/2">
@@ -483,4 +418,80 @@
     </div>
 </div>
 <!-- Fin Pestaña Modal para modificar Descuento -->
+
+<script>
+        //Ventana modal PRODUCTO
+        document.getElementById('btnAgregarProducto').addEventListener('click', function() {
+        document.getElementById('modalAgregarProducto').classList.remove('hidden');
+    });
+
+    //// Ventana modal CATEGORIA
+    document.getElementById('btnAgregarCategoria').addEventListener('click', function() {
+        document.getElementById('modalAgregarCategoria').classList.remove('hidden');
+    });
+
+    
+    //Botones para modulo de agregar
+    document.getElementById('closeModal').addEventListener('click', function() {
+      document.getElementById('modalAgregarProducto').classList.add('hidden');
+    });
+
+    document.getElementById('closeModalC').addEventListener('click', function() {
+      document.getElementById('modalAgregarCategoria').classList.add('hidden');
+    });
+
+    document.getElementById('closeModalD').addEventListener('click', function() {
+      document.getElementById('modalAgregarDescuento').classList.add('hidden');
+    });
+
+    document.getElementById('cancelarModal').addEventListener('click', function() {
+      document.getElementById('modalAgregarProducto').classList.add('hidden');
+    });
+    document.getElementById('cancelarModalC').addEventListener('click', function() {
+      document.getElementById('modalAgregarCategoria').classList.add('hidden');
+    });
+    document.getElementById('cancelarModalD').addEventListener('click', function() {
+      document.getElementById('modalAgregarDescuento').classList.add('hidden');
+    });
+
+    function previewImages(event) {
+    const files = event.target.files;
+    const previewContainer = document.getElementById('preview-container');
+
+    // Limpiar el contenedor de previsualización
+    previewContainer.innerHTML = '';
+
+    if (files) {
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Crear un contenedor para cada imagen
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('relative', 'w-32', 'h-32', 'border', 'rounded-lg', 'overflow-hidden', 'shadow-md');
+
+                // Crear la imagen
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('w-full', 'h-full', 'object-cover');
+
+                // Botón para eliminar la imagen
+                const removeButton = document.createElement('button');
+                removeButton.innerHTML = '&times;';
+                removeButton.classList.add('absolute', 'top-1', 'right-1', 'bg-red-500', 'text-white', 'rounded-full', 'w-6', 'h-6', 'flex', 'items-center', 'justify-center', 'cursor-pointer', 'hover:bg-red-700');
+                removeButton.onclick = () => imageContainer.remove();
+
+                // Agregar la imagen y el botón al contenedor
+                imageContainer.appendChild(img);
+                imageContainer.appendChild(removeButton);
+
+                // Agregar el contenedor al contenedor de previsualización
+                previewContainer.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+}
+</script>
 @endsection

@@ -272,6 +272,7 @@
             <p>&copy; 2025 COS. Todos los derechos reservados.</p>
         </div>
     </footer>
+
     <script>
                 // Lógica para cambiar entre pestañas
         document.querySelectorAll(".tab-link").forEach((tab) => {

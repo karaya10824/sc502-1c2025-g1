@@ -48,16 +48,16 @@
                                     <th class="py-3 px-2 text-center">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-300">
-                            <tr class="hover:bg-gray-100 text-center transition" ><?php foreach ($Gastos as $gasto): ?>
+                            <tbody class="divide-y divide-gray-300"><?php foreach ($Gastos as $gasto): ?>
+                            <tr class="hover:bg-gray-100 text-center transition" >
                                     <td class="py-3 px-2 text-center">{{  \Carbon\Carbon::parse($gasto->fecha_gasto)->format('d/m/Y') }}</td>
                                     <td class="py-3 px-2 text-center"><?php echo $gasto['descripcion_gasto']; ?></td>
                                     <td class="py-3 px-2 text-center"> {{ $gasto->categoriagasto->descripcion_categoria_gasto ?? 'Sin Categoria'}} </td>
-                                    <td class="py-3 px-2 text-center">₡<?php echo $gasto['monto_gasto']; ?></td>
+                                    <td class="py-3 px-2 text-center">₡{{ number_format($gasto->monto_gasto, 0, '.', ',') ?? 'Producto no encontrado'  }}</td>
                                     <td class="py-3 px-4 flex gap-2 justify-center">
-                                        <button id="btnModificarGasto" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition" data-id="<?php echo $gasto['id_gasto']; ?>" data-fecha="{{  \Carbon\Carbon::parse($gasto->fecha_gasto)->format('Y-m-d') }}" data-descripcion="<?php echo $gasto['descripcion_gasto']; ?>" data-categoria="<?php echo $gasto['id_categoria_gasto']; ?>" data-monto="<?php echo $gasto['monto_gasto']; ?>">
+                                        <a href="{{ url('/gasto/modificar/' . ($gasto['id_gasto'] ?? '')) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition">
                                             <i class="fas fa-pencil"></i>
-                                        </button>
+                                        </a>
                                         <form action="{{ url('/gastos/eliminar/' . $gasto['id_gasto']) }}" method="post">
                                         @csrf
                                         @method('DELETE')
@@ -109,7 +109,7 @@
                                     <td class="py-3 px-2 text-center"><?php echo $categoria['descripcion_categoria_gasto']; ?></td>
                                     <td class="py-3 px-2 text-center text-green-600 font-semibold"> <span class="px-2 py-1 text-xs rounded-full <?php echo $categoria['fk_id_estado'] == 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>"><?php echo $categoria['fk_id_estado'] == 1 ? 'Activa' : 'Inactiva'; ?></span></td>
                                     <td class="py-3 px-4 flex gap-2 justify-center">
-                                        <a href="#" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarProducto" data-id="<?php echo $categoria['id_categoria_gasto']; ?>" data-nombre="<?php echo $categoria['descripcion_categoria_gastos']; ?>">
+                                        <a href="{{ url('/categoria/gasto/modificar/' . ($categoria['id_categoria_gasto'] ?? '')) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition" data-id="<?php echo $gasto['id_gasto']; ?>" data-fecha="{{  \Carbon\Carbon::parse($gasto->fecha_gasto)->format('Y-m-d') }}">
                                             <i class="fas fa-pencil"></i>
                                         </a>
                                         <form action="{{ url('/categoria/gasto/eliminar/' . $categoria['id_categoria_gasto']) }}" method="post">
@@ -157,7 +157,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="cantidad" class="block text-gray-700">Categoria</label>
-                    <select name="fk_id_categoria_gasto" id="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" aria-labelledby="rolHelpBlock">
+                    <select name="fk_id_categoria_gasto" id="role" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" aria-labelledby="rolHelpBlock">
                         <option value="" selected disabled>Seleccione:</option>
                         @foreach ($Categorias as $categoria)
                             <option value="{{$categoria->id_categoria_gasto}}">{{$categoria->descripcion_categoria_gasto}}</option>
@@ -177,49 +177,6 @@
     </div>
 </div>
 <!-- Fin Pestaña Modal para Agregar Gasto-->
-
-<!-- Pestaña Modal para modificar Gasto -->
-<div id="modalModificarGasto" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/2">
-        <div class="flex justify-between items-center bg-green-600 text-white px-4 py-2 rounded-t-lg">
-            <h3 class="text-lg font-semibold">Modificar Gasto</h3>
-            <button id="closeModalModificar" class="text-white">&times;</button>
-        </div>
-        <div class="p-6">
-            <form id="formModificarGasto" method="post" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="id_gasto" name="id_gasto">
-                <div class="mb-4">
-                    <label for="fecha_gasto_mod" class="block text-gray-700">Fecha</label>
-                    <input type="date" id="fecha_gasto_mod" name="fecha_gasto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="descripcion_gasto_mod" class="block text-gray-700">Descripción</label>
-                    <textarea id="descripcion_gasto_mod" name="descripcion_gasto" class="w-full px-3 py-2 border rounded-lg"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="categoria_mod" class="block text-gray-700">Categoria</label>
-                    <select name="fk_id_categoria_gasto" id="categoria_mod" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" aria-labelledby="rolHelpBlock">
-                        <option value="id_categoria_mod" selected></option>
-                        @foreach ($Categorias as $categoria)
-                            <option value="{{$categoria->id_categoria_gasto}}">{{$categoria->descripcion_categoria_gasto}}</option>
-                        @endforeach
-                    </select>  
-                </div>
-                <div class="mb-4">
-                    <label for="monto_gasto_mod" class="block text-gray-700">Monto</label>
-                    <input type="number" id="monto_gasto_mod" name="monto_gasto" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="flex justify-end">
-                    <button type="button" id="cancelarModalModificar" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Modificar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- Fin Pestaña Modal para modificar Gasto -->
 
 <!--Pestaña Modal para Agregar Categoria-->
 <div id="modalAgregarCategoriaG" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
@@ -252,6 +209,7 @@
 </div>
 <!-- Fin Pestaña Modal para Agregar Categoria-->
 
+
 <script>
     //// Ventana modal Gasto
     document.getElementById('btnAgregarGasto').addEventListener('click', function() {
@@ -261,27 +219,6 @@
     document.getElementById('btnAgregarCategoriaG').addEventListener('click', function() {
         document.getElementById('modalAgregarCategoriaG').classList.remove('hidden');
     });
-
-    document.getElementById('btnModificarGasto').addEventListener('click', function() {
-        console.log(this.dataset.fecha);
-        document.getElementById('id_gasto').value = this.dataset.id;
-          document.getElementById('fecha_gasto_mod').value = this.dataset.fecha;
-          document.getElementById('descripcion_gasto_mod').value = this.dataset.descripcion;
-          document.getElementById('monto_gasto_mod').value = this.dataset.monto;
-          document.getElementById('id_categoria_mod').value = this.dataset.monto;
-
-        document.getElementById('modalModificarGasto').classList.remove('hidden');
-    });
-
-    // Modificar Gasto
-    document.getElementById('closeModalModificar').addEventListener('click', function() {
-      document.getElementById('modalModificarGasto').classList.add('hidden');
-    });
-    
-    document.getElementById('cancelarModalModificar').addEventListener('click', function() {
-      document.getElementById('modalModificarGasto').classList.add('hidden');
-    });
-
 
     document.getElementById('closeModalGasto').addEventListener('click', function() {
       document.getElementById('modalAgregarGasto').classList.add('hidden');

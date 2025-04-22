@@ -61,8 +61,8 @@
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
         </button>
         <div class="relative">
-          <button class="btn-opciones">
-            <img class="w-10 h-10 rounded-full" src="https://i.pravatar.cc/100?img=3" alt="User avatar">
+          <button class="btn-opciones w-12 h-12">
+            <img class="w-full h-full rounded-full" src="{{ Auth::user()->ruta_imagen ? asset('storage/' . Auth::user()->ruta_imagen) : asset('images/default-user.png') }}" alt="User avatar">
           </button>
           <div class="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg py-2 hidden">
             <a href="{{ route('perfil-vista') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Perfil</a>
@@ -73,9 +73,9 @@
     </header>
 
     <!-- Main content -->
-    <div class="flex-1 flex flex-col w-full">
+    <div class="flex-1 flex flex-col">
       <!-- Main content placeholder -->
-      <main class="pt-16 h-full overflow-y-auto bg-gray-50">
+      <main class="pt-16 overflow-y-auto h-full w-full bg-gray-100">
         @yield('principal')
         <!-- Aquí puedes añadir la tabla u otros contenidos -->
       </main>
@@ -154,7 +154,6 @@
         });
     });
 
-    //Ventana modal USUARIO
     //Ventana modal ROL
     document.querySelectorAll('.btnModificarRol').forEach(button => {
       button.addEventListener('click', function() {
@@ -192,107 +191,15 @@
         document.getElementById('modalAgregarProducto').classList.remove('hidden');
     });
 
-    document.querySelectorAll('.btnModificarProducto').forEach(button => {
-      button.addEventListener('click', function() {
-          document.getElementById('id_producto').value = this.dataset.id;
-          document.getElementById('nombre_producto_mod').value = this.dataset.nombre;
-          document.getElementById('descripcion_mod').value = this.dataset.descripcion;
-          document.getElementById('cantidad_mod').value = this.dataset.cantidad;
-          document.getElementById('precio_costo_mod').value = this.dataset.precioCosto;
-          document.getElementById('precio_venta_mod').value = this.dataset.precioVenta;
-          document.getElementById('precio_por_mayor_mod').value = this.dataset.precioMayor;
-          document.getElementById('fk_id_estado_mod').value = this.dataset.activo;
-          // Aquí puedes agregar lógica para mostrar la imagen actual si es necesario
-          document.getElementById('modalModificarProducto').classList.remove('hidden');
-      });
-    });
-
-    document.getElementById("formModificarProducto").addEventListener("submit", function(event) {
-          event.preventDefault(); // Evita el envío por defecto
-          
-          // Obtener el ID de la categoría desde el input
-          const idProducto = document.getElementById("id_producto").value;
-
-          if (!idProducto) {
-              alert("El ID de la categoría es obligatorio.");
-              return;
-          }
-
-          // Actualizar la URL del formulario dinámicamente
-          this.action = `/producto/modificar/${idProducto}`;
-
-          // Enviar el formulario manualmente
-          this.submit();
-      });
-
     //// Ventana modal CATEGORIA
     document.getElementById('btnAgregarCategoria').addEventListener('click', function() {
         document.getElementById('modalAgregarCategoria').classList.remove('hidden');
     });
 
-    document.querySelectorAll('.btnModificarCategoria').forEach(button => {
-      button.addEventListener('click', function() {
-          document.getElementById('id_categoria_prod').value = this.dataset.id;
-          document.getElementById('nombre_categoria_mod').value = this.dataset.nombre;
-          document.getElementById('descripcion_categoria_mod').value = this.dataset.descripcion;
-          document.getElementById('fk_id_estado').value = this.dataset.activo;
-          // Aquí puedes agregar lógica para mostrar la imagen actual si es necesario
-          document.getElementById('modalModificarCategoria').classList.remove('hidden');
-      });
-    });
-
-    document.getElementById("formModificarCategoria").addEventListener("submit", function(event) {
-          event.preventDefault(); // Evita el envío por defecto
-          
-          // Obtener el ID de la categoría desde el input
-          const idCategoria = document.getElementById("id_categoria_prod").value;
-
-          if (!idCategoria) {
-              alert("El ID de la categoría es obligatorio.");
-              return;
-          }
-
-          // Actualizar la URL del formulario dinámicamente
-          this.action = `/categoria/modificar/${idCategoria}`;
-
-          // Enviar el formulario manualmente
-          this.submit();
-      });
-
     //// Ventana modal DESCUENTO
     document.getElementById('btnAgregarDescuento').addEventListener('click', function() {
         document.getElementById('modalAgregarDescuento').classList.remove('hidden');
     });
-
-    document.querySelectorAll('.btnModificarDescuento').forEach(button => {
-      button.addEventListener('click', function() {
-          document.getElementById('id_descuento').value = this.dataset.id;
-          document.getElementById('codigo_de_descuento_mod').value = this.dataset.codigo;
-          document.getElementById('porcentaje_descuento_mod').value = this.dataset.porcentaje;
-          document.getElementById('descripcion_descuento_mod').value = this.dataset.descripcion;
-          document.getElementById('fk_id_estado_mod').value = this.dataset.activo;
-          // Aquí puedes agregar lógica para mostrar la imagen actual si es necesario
-          document.getElementById('modalModificarDescuento').classList.remove('hidden');
-      });
-    });
-
-    document.getElementById("formModificarDescuento").addEventListener("submit", function(event) {
-          event.preventDefault(); // Evita el envío por defecto
-          
-          // Obtener el ID de la categoría desde el input
-          const idDescuento = document.getElementById("id_descuento").value;
-
-          if (!idDescuento) {
-              alert("El ID del descuento es obligatorio.");
-              return;
-          }
-
-          // Actualizar la URL del formulario dinámicamente
-          this.action = `/descuento/modificar/${idDescuento}`;
-
-          // Enviar el formulario manualmente
-          this.submit();
-      });
     
     //Botones para modulo de agregar
     document.getElementById('closeModal').addEventListener('click', function() {
@@ -315,28 +222,6 @@
     });
     document.getElementById('cancelarModalD').addEventListener('click', function() {
       document.getElementById('modalAgregarDescuento').classList.add('hidden');
-    });
-
-    //Botones para modulo de modificar //Botones cancelar
-
-    document.getElementById('closeModalModificar').addEventListener('click', function() {
-      document.getElementById('modalModificarProducto').classList.add('hidden');
-    });
-    document.getElementById('closeModalModificarC').addEventListener('click', function() {
-      document.getElementById('modalModificarCategoria').classList.add('hidden');
-    });
-    document.getElementById('closeModalModificarD').addEventListener('click', function() {
-      document.getElementById('modalModificarDescuento').classList.add('hidden');
-    });
-
-    document.getElementById('cancelarModalModificar').addEventListener('click', function() {
-      document.getElementById('modalModificarProducto').classList.add('hidden');
-    });
-    document.getElementById('cancelarModalModificarC').addEventListener('click', function() {
-      document.getElementById('modalModificarCategoria').classList.add('hidden');
-    });
-    document.getElementById('cancelarModalModificarD').addEventListener('click', function() {
-      document.getElementById('modalModificarDescuento').classList.add('hidden');
     });
 
   </script>

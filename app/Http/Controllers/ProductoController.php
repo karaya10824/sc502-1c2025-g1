@@ -7,6 +7,7 @@ use App\Models\CategoriaProducto;
 use App\Models\Descuento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ use PDF;
 class ProductoController extends Controller{
     public function index(){
         // Obtener todos los productos
-        $productos = Producto::with(['media'])->get();
+        $productos = Producto::with(['media', 'categoria'])->get();
         $categorias = CategoriaProducto::all();
         $descuentos = Descuento::all();
         $active = "inventario";
@@ -37,8 +38,8 @@ class ProductoController extends Controller{
             'precio_por_mayor' => 'required',
             'activo' => 'required'
         ]);*/
-
         // Obtener todos los productos
+
         $productos = Producto::create([
             'nombre_producto' => $request->nombre_producto,
             'descripcion_producto' => $request->descripcion_producto,
@@ -46,8 +47,8 @@ class ProductoController extends Controller{
             'precio_costo_producto' => $request->precio_costo_producto,
             'precio_venta_producto' => $request->precio_venta_producto,
             'precio_por_mayor_producto' => $request->precio_por_mayor_producto,
-            'FK_id_categoria_prod' => 1,
-            'FK_id_estado' => $request->fk_id_estado,
+            'fk_id_categoria_prod' => $request->fk_id_categoria_prod,
+            'fk_id_estado' => $request->fk_id_estado,
         ]);
 
         if ($request->hasFile('imagenes')) {
@@ -68,10 +69,28 @@ class ProductoController extends Controller{
         return redirect()->route('productos-vista');
     }
 
+    public function eliminarImagen($id_imagen){       
+        // Buscar la imagen por su ID
+        $media = Media::findOrFail($id_imagen);
+
+        // Eliminar la imagen de la colección
+        $media->delete();
+        return redirect()->route('productos-modificar-vista', ['id_producto' => $media->model_id]);
+    }
+
+    public function vistaModificar(Request $request, $id_producto){
+        // Buscar el producto en la base de datos
+        $producto = Producto::find($id_producto);
+        $categorias = CategoriaProducto::all();
+        $active = "inventario";
+
+        return view('inventario.modificar', ['producto' => $producto, 'Categorias' => $categorias, 'active' => $active]);
+        //return redirect()->route('productos-modificar-vista', compact('producto', 'categorias', 'active'));
+    }
+
     public function modificar(Request $request, $id){
         // Buscar el producto en la base de datos
         $producto = Producto::find($id);
-
         // Actualizar los campos con los nuevos valores
         $producto->nombre_producto = $request->input('nombre_producto');
         $producto->descripcion_producto = $request->input('descripcion_producto');
@@ -79,7 +98,11 @@ class ProductoController extends Controller{
         $producto->precio_costo_producto = $request->input('precio_costo_producto');
         $producto->precio_venta_producto = $request->input('precio_venta_producto');
         $producto->precio_por_mayor_producto = $request->input('precio_por_mayor_producto');
-        $producto->fk_id_estado =  $request->input('fk_id_estado');
+        $producto->fk_id_categoria_prod = $request->input('fk_id_categoria_prod');
+
+        if($request->input('fk_id_estado') != null){
+            $producto->fk_id_estado =  $request->input('fk_id_estado');
+        }
 
         if ($request->hasFile('imagenes')) {
             $producto->clearMediaCollection();

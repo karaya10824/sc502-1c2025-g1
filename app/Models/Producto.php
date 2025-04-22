@@ -38,16 +38,25 @@ class Producto extends Model implements HasMedia{
         $this->addMediaCollection('imagenes')->useDisk('public');
     }
 
+
+    public function getImagenUrlAttribute(){
+        return $this->getFirstMediaUrl('imagenes') ?: asset('images/default.png');
+    }
+
+    public function detallePedido(){
+    return $this->hasMany(DetallePedido::class, 'fk_id_producto', 'id_producto');
+    }
+
     // Relaciones con otras tablas
     public function categoria(){
-        return $this->belongsTo(FideCategoria::class, 'fk_id_categoria_prod', 'id_categoria_prod');
+        return $this->belongsTo(CategoriaProducto::class, 'fk_id_categoria_prod', 'id_categoria_prod');
     }
 
     public function proveedor(){
-        return $this->belongsTo(FideProveedor::class, 'fk_id_proveedor', 'id_proveedor');
+        return $this->belongsTo(Proveedor::class, 'fk_id_proveedor', 'id_proveedor');
     }
 
     public function estado(){
-        return $this->belongsTo(FideEstado::class, 'fk_id_estado', 'id_estado');
+        return $this->belongsTo(Estado::class, 'fk_id_estado', 'id_estado');
     }
 }

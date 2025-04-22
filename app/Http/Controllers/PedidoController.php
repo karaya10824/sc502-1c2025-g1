@@ -18,15 +18,18 @@ use PDF;
 class PedidoController extends Controller{
     public function index(){
         // Obtener todos los productos
-        $productos = Producto::all();
-        $categorias = CategoriaProducto::all();
-        $descuentos = Descuento::all();
         $pedidos = Pedido::with(['detallePedido.producto.media', 'metodoPago', 'cliente'])->get();
-
+        // foreach ($pedidos as $pedido) {
+        //     foreach ($pedido->detallePedido as $detalle) {
+        //         foreach ($detalle->producto->media as $media) {
+        //             dd($media->getUrl());
+        //         }
+        //     }
+        // }
         $active = "pedido";
 
         //return view('dashboard.Inventario', compact('productos', 'categorias', 'descuentos'));
-        return view('pedido.listado', ['Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos, 'Pedidos' => $pedidos, 'active' => $active]);
+        return view('pedido.listado', ['Pedidos' => $pedidos, 'active' => $active]);
     }
 
     public function vistaAgregar(){
@@ -85,6 +88,8 @@ class PedidoController extends Controller{
             $cantidad = $cantidades[$index];
             $precio = $precios[$index];
             $descuento = $descuentos[$index];
+
+            // Crear el detalle del pedido
             $detallePedidos = DetallePedido::create([
                 'cantidad' => $cantidad,
                 'subtotal' => $precio,
@@ -92,27 +97,42 @@ class PedidoController extends Controller{
                 'fk_id_pedido' => $idPedido,
                 'fk_id_producto' => $productoId,
             ]);
+            // Actualizar la cantidad del producto
+            $producto = Producto::find($productoId);
+            $producto->cantidad_producto -= $cantidad;
+            $producto->save();
         }
 
         return redirect()->route('pedidos-vista');
     }
     public function vistaModificar($id_pedido){
         $Pedido = Pedido::findOrFail($id_pedido);
+
+        $productos = Producto::all();
+        $categorias = CategoriaProducto::all();
+        $descuentos = Descuento::all();
+        $metodosPago = MetodoPago::all();
+
         $active = "pedido";
         
-        return view('pedido.modificar', compact('active', 'Pedido'));    
+        return view('pedido.modificar', ['Pedido' => $Pedido ,'Productos' => $productos, 'Categorias' => $categorias, 'Descuentos' => $descuentos, 'active' => $active, 'metodosPago' => $metodosPago]);    
     }
 
     public function eliminar($id_pedido){     
         $detallePedidos = DetallePedido::where('fk_id_pedido', $id_pedido)->get();
 
+        // Eliminar los detalles del pedido
         foreach ($detallePedidos as $detallePedido) {
             $detallePedido->delete();
+            // Actualizar la cantidad del producto
+            $producto = Producto::find($detallePedido->fk_id_producto);
+            $producto->cantidad_producto += $detallePedido->cantidad;
+            $producto->save();
         }
 
-        // Buscar el producto
+        // Buscar el pedido
         $pedido = Pedido::find($id_pedido);
-        // Eliminar el producto
+        // Eliminar el pedido
         $pedido->delete();
 
         return redirect()->route('pedidos-vista');

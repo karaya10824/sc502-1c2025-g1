@@ -15,7 +15,6 @@ class Proveedor extends Model{
     // Campos que se pueden llenar masivamente
     protected $fillable = [
     'nombre_proveedor',
-    'descripcion_producto',
     'direccion_proveedor',  
     'telefono_proveedor',
     'correo_proveedor',
@@ -23,4 +22,8 @@ class Proveedor extends Model{
 
     // Si la tabla no tiene timestamps (created_at, updated_at)
     public $timestamps = false;
+
+    public function estado(){
+        return $this->belongsTo(Estado::class, 'fk_id_estado', 'id_estado');
+    }
 }

@@ -51,9 +51,9 @@
                                         <td class="py-3 px-2 text-center">{{  \Carbon\Carbon::parse($compra->fecha_compra)->format('d/m/Y') }}</td>
                                         <td class="py-3 px-2 text-center"><?php echo $compra['detalle_compra']; ?></td>
                                         <td class="py-3 px-2 text-center">{{ $compra->proveedor->nombre_proveedor ?? 'Sin proveedor' }}</td>
-                                        <td class="py-3 px-2 text-center"><?php echo $compra['total_compra']; ?></td>
+                                        <td class="py-3 px-2 text-center">₡{{ number_format($compra->total_compra, 0, '.', ',') ?? 'Producto no encontrado'  }}</td>
                                         <td class="py-3 px-4 flex gap-2 justify-center">
-                                            <a class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarCompra" data-id="<?php echo $compra['id_producto']; ?>" data-nombre="<?php echo $compra['nombre_producto']; ?>">
+                                            <a href="{{ url('/compra/modificar/' . $compra['id_compra']) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition">
                                                 <i class="fas fa-pencil"></i>
                                             </a>
                                             <form action="{{ url('/compra/eliminar/' . $compra['id_compra']) }}" method="post">
@@ -109,10 +109,10 @@
                                         <td class="py-3 px-2 text-center"><?php echo $proveedor['nombre_proveedor']; ?></td>
                                         <td class="py-3 px-2 text-center"><?php echo $proveedor['telefono_proveedor']; ?></td>
                                         <td class="py-3 px-2 text-center"><?php echo $proveedor['correo_proveedor']; ?></td>
-                                        <td class="py-3 px-2 text-center">₡<?php echo $proveedor['direccion_proveedor']; ?></td>
+                                        <td class="py-3 px-2 text-center"><?php echo $proveedor['direccion_proveedor']; ?></td>
                                         <td class="py-3 px-2 text-center text-green-600 font-semibold"> <span class="px-2 py-1 text-xs rounded-full <?php echo $proveedor['fk_id_estado'] == 1 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>"><?php echo $proveedor['fk_id_estado'] == 1 ? 'Activa' : 'Inactiva'; ?></span></td>
                                         <td class="py-3 px-4 flex gap-2 justify-center">
-                                            <a class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition btnModificarProveedor" data-id="<?php echo $proveedor['id_producto']; ?>" data-nombre="<?php echo $proveedor['nombre_producto']; ?>">
+                                            <a href="{{ url('/proveedor/modificar/' . $proveedor['id_proveedor']) }}" class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-700 transition">
                                                 <i class="fas fa-pencil"></i>
                                             </a>
                                             <form action="{{ url('/proveedor/eliminar/' . $proveedor['id_proveedor']) }}" method="post">
@@ -181,6 +181,59 @@
 </div>
 <!-- Fin Pestaña Modal para Agregar Compras-->
 
+@if(count($Compras) !== 0)
+<!-- Pestaña Modal para modificar Compras -->
+<div id="modalModificarCompra" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg w-3/4 h-3/4 overflow-y-auto">
+        <div class="flex justify-between items-center bg-gray-800 text-white px-4 py-2 rounded-t-lg">
+            <h3 class="text-lg font-semibold">Modificar Compras</h3>
+            <button id="closeModalModificar" class="text-white">&times;</button>
+        </div>
+        <div class="p-6">
+            <form action="{{ url('/compra/modificar/' . $compra['id_compra']) }}"method="post" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="id_compra" name="id_compra">
+
+                <div class="mb-4">
+                <label for="fecha_compra_mod" class="block text-gray-700">Fecha</label>
+                    <input type="date" id="fecha_compra_mod" name="fecha_compra" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div class="mb-4">
+                    <label for="total_compra_mod" class="block text-gray-700">Total</label>
+                    <input type="number" id="total_compra_mod" name="total_compra" class="w-full px-3 py-2 border rounded-lg" required>
+                </div>
+                <div class="mb-4">
+                    <label for="detalle_compra_mod" class="block text-gray-700">Detalle</label>
+                    <textarea id="detalle_compra_mod" name="detalle_compra" class="w-full px-3 py-2 border rounded-lg"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="fk_id_proveedor" class="block text-gray-700">Proovedor</label>
+                    <select name="fk_id_proveedor" id="role" class="w-full px-3 py-2 border rounded-lg" aria-labelledby="rolHelpBlock">
+                        <option value="" selected disabled>Seleccione:</option>
+                        @foreach ($Proveedores as $proveedor)
+                            <option value="{{$proveedor->id_proveedor}}">{{$proveedor->nombre_proveedor}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="fk_id_estado" class="block text-gray-700">Estado</label>
+                    <select id="fk_id_estado_mod" name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
+                        <option value="1">Activo</option>
+                        <option value="2">Inactivo</option>
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="cancelarModalModificar" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Modificar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Fin Pestaña Modal para modificar Compras -->
+@endif
+
 <!--Pestaña Modal para Agregar Proveedor-->
 <div id="modalAgregarProveedor" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-lg shadow-lg w-3/4 h-3/4 overflow-y-auto">
@@ -201,11 +254,18 @@
                 </div>
                 <div class="mb-4">
                     <label for="telefono_proveedor" class="block text-gray-700">Telefono</label>
-                    <input type="number" id="telefono_proveedor" name="telefono_proveedor" class="w-full px-3 py-2 border rounded-lg" required>
+                    <input type="text" id="telefono_proveedor" name="telefono_proveedor" class="w-full px-3 py-2 border rounded-lg" required>
                 </div>
                 <div class="mb-4">
                     <label for="correo_proveedor" class="block text-gray-700">Correo</label>
                     <input type="email" id="correo_proveedor" name="correo_proveedor" class="w-full px-3 py-2 border rounded-lg">
+                </div>
+                <div class="mb-4">
+                    <label for="fk_id_estado" class="block text-gray-700">Estado</label>
+                    <select name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
+                        <option value="1">Activo</option>
+                        <option value="2">Inactivo</option>
+                    </select>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" id="cancelarModalProveedor" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
@@ -217,62 +277,54 @@
 </div>
 <!-- Fin Pestaña Modal para Agregar Proveedor-->
 
-<!-- Pestaña Modal para modificar producto -->
-<div id="modalModificarProducto" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-white rounded-lg shadow-lg w-1/2">
+@if(count($Proveedores) !== 0)
+<!-- Pestaña Modal para modificar Proveedor -->
+<div id="modalModificarProveedor" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg shadow-lg w-3/4 h-3/4 overflow-y-auto">
         <div class="flex justify-between items-center bg-gray-800 text-white px-4 py-2 rounded-t-lg">
-            <h3 class="text-lg font-semibold">Modificar Producto</h3>
-            <button id="closeModalModificar" class="text-white">&times;</button>
+            <h3 class="text-lg font-semibold">Modificar Proveedor</h3>
+            <button id="closeModalModificarPR" class="text-white">&times;</button>
         </div>
         <div class="p-6">
-            <form id="formModificarProducto" method="post" enctype="multipart/form-data">
+            <form action="{{ url('/proveedor/modificar/' . $proveedor['id_proveedor']) }}"method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <input type="hidden" id="id_producto" name="id_producto">
+                <input type="hidden" id="id_proveedor" name="id_proveedor">
+
+
                 <div class="mb-4">
-                    <label for="nombre_producto_mod" class="block text-gray-700">Nombre del Producto</label>
-                    <input type="text" id="nombre_producto_mod" name="nombre_producto" class="w-full px-3 py-2 border rounded-lg">
+                    <label for="nombre_proveedor_mod" class="block text-gray-700">Nombre del Proveedor</label>
+                    <input type="text" id="nombre_proveedor_mod" name="nombre_proveedor" class="w-full px-3 py-2 border rounded-lg" required>
                 </div>
                 <div class="mb-4">
-                    <label for="descripcion_mod" class="block text-gray-700">Descripción</label>
-                    <textarea id="descripcion_mod" name="descripcion" class="w-full px-3 py-2 border rounded-lg"></textarea>
+                    <label for="direccion_proveedor_mod" class="block text-gray-700">Direccion del Proveedor</label>
+                    <textarea id="direccion_proveedor_mod" name="direccion_proveedor" class="w-full px-3 py-2 border rounded-lg"></textarea>
                 </div>
                 <div class="mb-4">
-                    <label for="cantidad_mod" class="block text-gray-700">Cantidad</label>
-                    <input type="number" id="cantidad_mod" name="cantidad" class="w-full px-3 py-2 border rounded-lg">
+                    <label for="telefono_proveedor_mod" class="block text-gray-700">Telefono</label>
+                    <input type="text" id="telefono_proveedor_mod" name="telefono_proveedor" class="w-full px-3 py-2 border rounded-lg" required>
                 </div>
                 <div class="mb-4">
-                    <label for="precio_costo_mod" class="block text-gray-700">Precio de Costo</label>
-                    <input type="number" id="precio_costo_mod" name="precio_costo" class="w-full px-3 py-2 border rounded-lg">
+                    <label for="correo_proveedor_mod" class="block text-gray-700">Correo</label>
+                    <input type="email" id="correo_proveedor_mod" name="correo_proveedor" class="w-full px-3 py-2 border rounded-lg">
                 </div>
                 <div class="mb-4">
-                    <label for="precio_venta_mod" class="block text-gray-700">Precio de Venta</label>
-                    <input type="number" id="precio_venta_mod" name="precio_venta" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="precio_por_mayor_mod" class="block text-gray-700">Precio por Mayor</label>
-                    <input type="number" id="precio_por_mayor_mod" name="precio_por_mayor" class="w-full px-3 py-2 border rounded-lg">
-                </div>
-                <div class="mb-4">
-                    <label for="activo_mod" class="block text-gray-700">Estado</label>
-                    <select id="activo_mod" name="activo" class="w-full px-3 py-2 border rounded-lg">
+                    <label for="fk_id_estado" class="block text-gray-700">Estado</label>
+                    <select id="fk_id_estado_mod" name="fk_id_estado" class="w-full px-3 py-2 border rounded-lg">
                         <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
+                        <option value="2">Inactivo</option>
                     </select>
                 </div>
-                <div class="mb-4">
-                    <label for="imagen" class="block text-gray-700">Imagen</label>
-                    <input type="file" id="imagen" name="imagenes[]" class="w-full px-3 py-2 border rounded-lg" multiple>
-                </div>
                 <div class="flex justify-end">
-                    <button type="button" id="cancelarModalModificar" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
+                    <button type="button" id="cancelarModalModificarPR" class="px-4 py-2 bg-gray-600 text-white rounded-lg mr-2">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Modificar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- Fin Pestaña Modal para modificar producto -->
+<!-- Fin Pestaña Modal para modificar Proveedor -->
+@endif
 
 <script>
     //// Ventana modal PROVEEDOR
@@ -284,7 +336,49 @@
     document.getElementById('btnAgregarCompras').addEventListener('click', function() {
         document.getElementById('modalAgregarComprar').classList.remove('hidden');
     });
-    
+
+    document.querySelectorAll('.btnModificarProveedor').forEach(button => {
+    button.addEventListener('click', function() {
+        document.getElementById('id_proveedor').value = this.dataset.id;
+        document.getElementById('nombre_proveedor_mod').value = this.dataset.nombre;
+        document.getElementById('direccion_proveedor_mod').value = this.dataset.direccion;
+        document.getElementById('telefono_proveedor_mod').value = this.dataset.telefono;
+        document.getElementById('correo_proveedor_mod').value = this.dataset.correo;
+        document.getElementById('fk_id_estado_mod').value = this.dataset.estado;
+
+        document.getElementById('modalModificarProveedor').classList.remove('hidden');
+        });  
+    });
+
+    document.querySelectorAll('.btnModificarCompra').forEach(button => {
+    button.addEventListener('click', function() {
+        document.getElementById('id_compra').value = this.dataset.id;
+        document.getElementById('fecha_compra_mod').value = this.dataset.fecha;
+        document.getElementById('detalle_compra_mod').value = this.dataset.detalle;
+        document.getElementById('total_compra_mod').value = this.dataset.total;
+        document.getElementById('fk_id_estado_mod').value = this.dataset.estado;
+
+        document.getElementById('modalModificarCompra').classList.remove('hidden');
+        });  
+    });
+
+    //Botones para modulo de modificar
+    document.getElementById('closeModalModificar').addEventListener('click', function() {
+      document.getElementById('modalModificarCompra').classList.add('hidden');
+    });
+
+    document.getElementById('cancelarModalModificar').addEventListener('click', function() {
+      document.getElementById('modalModificarCompra').classList.add('hidden');
+    });
+
+    document.getElementById('closeModalModificarPR').addEventListener('click', function() {
+      document.getElementById('modalModificarProveedor').classList.add('hidden');
+    });
+
+    document.getElementById('cancelarModalModificarPR').addEventListener('click', function() {
+      document.getElementById('modalModificarProveedor').classList.add('hidden');
+    });
+
     //Botones para modulo de agregar
     document.getElementById('closeModalProveedor').addEventListener('click', function() {
       document.getElementById('modalAgregarProveedor').classList.add('hidden');

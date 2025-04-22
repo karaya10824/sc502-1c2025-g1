@@ -27,16 +27,26 @@ class CategoriaGastoController extends Controller{
         return redirect()->route('gastos-vista');
     }
 
+    public function vistaModificar(Request $request, $id){
+        // Buscar el producto en la base de datos
+        $categoria = CategoriaGasto::findOrFail($id);
+        $active = "gasto";
+
+        return view('categoria.gasto.modificar', ['Categoria' => $categoria, 'active' => $active]);
+        //return redirect()->route('productos-modificar-vista', compact('producto', 'categorias', 'active'));
+    }
+
     public function modificar(Request $request, $id){
         // Buscar el producto en la base de datos
-        $categoria = Categoria::findOrFail($id);
+        $categoria = CategoriaGasto::findOrFail($id);
 
         // Actualizar los campos con los nuevos valores
-        $categoria->nombre_categoria = $request->input('nombre_categoria');
-        $categoria->descripcion_categoria = $request->input('descripcion_categoria');
-        $categoria->activo = $request->input('activo');
+        $categoria->descripcion_categoria_gasto = $request->input('descripcion_categoria_gasto');
+        if($request->input('fk_id_estado') != null){
+            $categoria->fk_id_estado = $request->input('fk_id_estado');
+        }
 
         $categoria->save();
-        return redirect('/producto');
+        return redirect()->route('gastos-vista');
     }
 }

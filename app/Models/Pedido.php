@@ -47,7 +47,7 @@ class Pedido extends Model
     }
 
     public function descuento(){
-        return $this->belongsTo(Descuento::class);
+        return $this->belongsTo(Descuento::class, 'fk_id_descuento', 'id_descuento');
     }
 
     public function envio(){

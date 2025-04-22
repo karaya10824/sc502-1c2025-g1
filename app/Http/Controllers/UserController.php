@@ -19,6 +19,11 @@ class UserController extends Controller{
     }
 
     public function create(Request $request){
+        // Manejar la subida de la imagen
+        $rutaImagen = null;
+        if ($request->hasFile('imagen')) {
+            $rutaImagen = $request->file('imagen')->store('usuarios', 'public'); // Guarda en storage/app/public/usuarios
+        }
         try {
             DB::beginTransaction();
 
@@ -27,6 +32,7 @@ class UserController extends Controller{
 
             //Modificar el valor de password en nuestro request
             $request->merge(['password' => $fieldHash]);
+            $request->merge(['ruta_imagen' => $rutaImagen]);
 
             //Crear usuario
             $user = User::create($request->all());
@@ -53,11 +59,18 @@ class UserController extends Controller{
     public function modificar($id, Request $request){      
         // Buscar el producto
         $user = User::find($id);
-        // Eliminar el producto
+
+        $rutaImagen = $user->ruta_imagen;
+        if ($request->hasFile('imagen')) {
+            $rutaImagen = $request->file('imagen')->store('usuarios', 'public'); // Guarda en storage/app/public/usuarios
+        }
+
         $user->nombre =  $request->input('nombre');
         $user->apellidos =  $request->input('apellidos');
         $user->email =  $request->input('email');
         $user->telefono =  $request->input('telefono');
+        $user->ruta_imagen =  $rutaImagen;
+        $user->fk_id_estado = 1;
 
         $user->save();
 

@@ -116,7 +116,10 @@
                         <div class="splide__slide__container px-2 pb-6">
                             <div class="bg-white rounded-lg shadow-md overflow-hidden group">
                                 <div class="relative">
-                                    <img src="https://holacompras.com/wp-content/uploads/2022/11/MQD83AMA-2.jpg" alt="Producto" class="w-full h-80 transform transition duration-300 hover:scale-105 ">
+                                    @foreach ($producto->media as $media)
+                                        <a href="{{ url('/producto/' . $producto->id_producto) }}"><img src="{{ $media->getUrl() }}" alt="Producto" class="w-full h-full transform transition duration-300 hover:scale-105 "></a>
+                                    @break
+                                    @endforeach
                                     <span class="absolute top-2 left-2 bg-black text-white text-xs uppercase px-2 py-1 rounded">Nuevo</span>
                                 </div>
                                 <div class="p-4">

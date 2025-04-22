@@ -28,7 +28,6 @@ class Authenticate implements AuthenticatesRequests
      * Create a new middleware instance.
      *
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
-     * @return void
      */
     public function __construct(Auth $auth)
     {
@@ -112,10 +111,10 @@ class Authenticate implements AuthenticatesRequests
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function redirectTo($request)
+    protected function redirectTo(Request $request)
     {
-        if(! $request->expectsJson()){
-            return route('login');
+        if (static::$redirectToCallback) {
+            return call_user_func(static::$redirectToCallback, $request);
         }
     }
 

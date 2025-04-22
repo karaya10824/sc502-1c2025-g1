@@ -792,7 +792,6 @@ class Middleware
                 ? \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class
                 : \Illuminate\Routing\Middleware\ThrottleRequests::class,
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-            'checkUserType' => \App\Http\Middleware\CheckUserType::class,
         ];
 
         if (class_exists(\Spark\Http\Middleware\VerifyBillableIsSubscribed::class)) {

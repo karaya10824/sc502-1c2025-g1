@@ -21,18 +21,18 @@ class DetallePedido extends Model{
     'nombre_proveedor',
     'subtotal',
     'detalle',
-    'FK_id_pedido',
-    'FK_id_producto'];
+    'fk_id_pedido',
+    'fk_id_producto'];
 
     // Si la tabla no tiene timestamps (created_at, updated_at)
     public $timestamps = false;
 
     //Relaciones con otras tablas
     public function pedido(){
-        return $this->belongsTo(Pedido::class, 'FK_id_pedido', 'id_pedido');
+        return $this->belongsTo(Pedido::class, 'fk_id_pedido', 'id_pedido');
     }
     
     public function producto(){
-        return $this->belongsTo(Producto::class, 'FK_id_producto', 'id_producto');
+        return $this->belongsTo(Producto::class, 'fk_id_producto', 'id_producto');
     }
 }

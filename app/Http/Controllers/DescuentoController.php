@@ -28,6 +28,15 @@ class DescuentoController extends Controller{
         return redirect()->route('productos-vista');
     }
 
+    public function vistaModificar(Request $request, $id_descuento){
+        // Buscar el producto en la base de datos
+        $descuento = Descuento::find($id_descuento);
+        $active = "inventario";
+
+        return view('descuento.modificar', ['Descuento' => $descuento, 'active' => $active]);
+        //return redirect()->route('productos-modificar-vista', compact('producto', 'categorias', 'active'));
+    }
+
     public function modificar(Request $request, $id){
         // Buscar el producto en la base de datos
         $descuento = Descuento::find($id);

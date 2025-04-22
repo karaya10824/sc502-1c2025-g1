@@ -27,7 +27,7 @@ class ProveedorController extends Controller{
             'direccion_proveedor' => $request->direccion_proveedor,
             'telefono_proveedor' => $request->telefono_proveedor,
             'correo_proveedor' => $request->correo_proveedor,
-            'FK_id_estado' => 1,
+            'fk_id_estado' => $request->fk_id_estado,
         ]);
 
         return redirect()->route('proveedor-vista');
@@ -41,8 +41,29 @@ class ProveedorController extends Controller{
         
         return redirect()->route('proveedor-vista');
     }
+
+    public function vistaModificar(Request $request, $id_proveedor){
+        // Buscar el producto en la base de datos
+        $proovedor = Proveedor::findOrFail($id_proveedor);
+        $active = "proveedor";
+
+        return view('proveedor.modificar', ['Proveedor' => $proovedor, 'active' => $active]);
+        //return redirect()->route('productos-modificar-vista', compact('producto', 'categorias', 'active'));
+    }
     
-    public function modificar(){
+    public function modificar(Request $request, $id_proveedor){
+        $proovedor = Proveedor::findOrFail($id_proveedor);
+
+        $proovedor->nombre_proveedor = $request->input('nombre_proveedor');
+        $proovedor->direccion_proveedor = $request->input('direccion_proveedor');
+        $proovedor->telefono_proveedor = $request->input('telefono_proveedor');
+        $proovedor->correo_proveedor = $request->input('correo_proveedor');
+        if($request->input('fk_id_estado') != null){
+            $proovedor->fk_id_estado = $request->input('fk_id_estado');
+        }
+
+
+        $proovedor->save();
 
         return redirect()->route('proveedor-vista');
     }

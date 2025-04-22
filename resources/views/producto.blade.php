@@ -1,24 +1,23 @@
 @extends('layouts.app')
 
 @section('contentt')
-<header>
+<header class="bg-gray-200 text-white py-20">
         <h1>Detalle del Producto</h1>
 </header>
-
     <main class="product-container">
         <!-- Imagen del producto -->
+
         <div class="product-gallery">
-            <img id="main-image" src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto">
-            <div class="thumbnails">
-                <img class="thumbnail" src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Imagen 1">
-                <img class="thumbnail" src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Imagen 2">
-                <img class="thumbnail" src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Imagen 3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            @foreach ($Producto->media as $imagen)
+                <img id="main-image" src="{{ $imagen->getUrl() }}" alt="Producto">
+            @endforeach
             </div>
         </div>
 
         <!-- Información del producto -->
         <div class="md:w-1/2 md:pl-8">
-            <h2 class="text-2xl font-bold mb-4">Pleasures Buzo Zip Dragon Marrón</h2>
+            <h2 class="text-2xl font-bold mb-4">{{ $Producto->nombre_producto}}</h2>
             <p class="text-xl text-gray-700 mb-4">$120.00</p>
             
             <div class="mb-4">
@@ -36,7 +35,12 @@
                 <input type="number" min="1" value="1" class="w-20 px-4 py-2 border rounded-lg">
             </div>
 
-            <button class="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 transition duration-300">Agregar al Carrito</button>
+            <button class="add-to-cart w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 transition duration-300"
+                data-id="{{ $Producto['id_producto'] }}"
+                data-nombre="{{ $Producto['nombre_producto'] }}"
+                data-precio="{{ $Producto['precio_venta_producto'] }}">
+                Agregar al Carrito
+            </button>
 
             <p class="mt-4 text-gray-700">
                 Este buzo de Pleasures con cremallera y diseño de dragón es ideal para un estilo urbano y moderno. Fabricado con materiales de alta calidad para máxima comodidad.
@@ -128,5 +132,84 @@
             </div>
         </div>
     </div>
+    <script>
+        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
+// Función para agregar un producto al carrito
+function agregarAlCarrito(id, nombre, precio) {
+    const productoExistente = carrito.find(item => item.id === id);
+
+    if (productoExistente) {
+        productoExistente.cantidad += 1;
+    } else {
+        carrito.push({ id, nombre, precio, cantidad: 1 });
+    }
+
+    // Guardar el carrito en localStorage
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+
+    // Mostrar el carrito actualizado
+    mostrarCarrito();
+}
+
+// Función para mostrar el carrito
+function mostrarCarrito() {
+    const carritoContainer = document.getElementById('carrito-container');
+    if (!carritoContainer) return;
+
+    carritoContainer.innerHTML = '';
+
+    carrito.forEach(producto => {
+        const item = document.createElement('div');
+        item.classList.add('flex', 'justify-between', 'items-center', 'border-b', 'py-2');
+        item.innerHTML = `
+            <span>${producto.nombre} (x${producto.cantidad})</span>
+            <span>₡${(producto.precio * producto.cantidad).toLocaleString('es-CR')}</span>
+        `;
+        carritoContainer.appendChild(item);
+    });
+
+    // Mostrar el total
+    const total = carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+    const totalElement = document.createElement('div');
+    totalElement.classList.add('font-bold', 'text-right', 'mt-4');
+    totalElement.innerText = `Total: ₡${total.toLocaleString('es-CR')}`;
+    carritoContainer.appendChild(totalElement);
+}
+
+const botonesAgregar = document.querySelectorAll('.add-to-cart');
+botonesAgregar.forEach(boton => {
+    boton.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const nombre = this.dataset.nombre;
+        const precio = parseFloat(this.dataset.precio);
+
+        agregarAlCarrito(id, nombre, precio);
+    });
+    });
+
+// Inicializar el carrito al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    mostrarCarrito();
+});
+
+// Función para guardar el carrito
+document.getElementById('guardar-carrito').addEventListener('click', function () {
+    fetch('/carrito/guardar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ carrito })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Carrito guardado correctamente.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+    </script>
 @endsection

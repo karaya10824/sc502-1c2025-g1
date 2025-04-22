@@ -25,7 +25,7 @@ class Compra extends Model{
     public $timestamps = false;
 
     //Relaciones con otras tablas
-    public function Proveedor(){
+    public function proveedor(){
         return $this->belongsTo(Proveedor::class, 'fk_id_proveedor');
     }
 

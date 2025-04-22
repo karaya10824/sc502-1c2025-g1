@@ -39,9 +39,30 @@ class CompraController extends Controller{
 
         return redirect()->route('proveedor-vista');
     }
-    
-    public function modificar(){
 
-        return view('proveedor.listado');
+    public function vistaModificar(Request $request, $id_compra){
+        // Buscar el producto en la base de datos
+        $compra = Compra::findOrFail($id_compra);
+        $Proveedores = Proveedor::all();
+
+        $active = "proveedor";
+
+        return view('compra.modificar', ['Compra' => $compra, 'Proveedores' => $Proveedores, 'active' => $active]);
+        //return redirect()->route('productos-modificar-vista', compact('producto', 'categorias', 'active'));
+    }
+    
+    public function modificar(Request $request, $id_compra){
+        $compra = Compra::findOrFail($id_compra);
+
+        $compra->fecha_compra = $request->input('fecha_compra');
+        $compra->total_compra = $request->input('total_compra');
+        $compra->detalle_compra = $request->input('detalle_compra');
+        if($request->input('fk_id_proveedor') != null){
+            $compra->fk_id_proveedor = $request->input('fk_id_proveedor');
+        }
+
+        $compra->save();
+
+        return redirect()->route('proveedor-vista');
     }
 }

@@ -11,10 +11,17 @@
     <input type="hidden" name="descuentos" id="descuentos">
 
     <div class="container w-full mx-auto mt-4">
-        <div class="grid grid-cols-2 gap-4"> <!-- Grid con 3 columnas y gap de 6 -->
+        <div class="w-auto flex flex-col px-6">
+            <form action="{{ route('pedidos-crear-vista') }}">
+                <div class="flex flex-row gap-2">
+                    <a href="{{ route('pedidos-vista') }}" class="w-auto px-5 py-2 h-10 mb-5 bg-gray-200 text-gray-700 font-semibold border border-indigo rounded-md hover:bg-gray-900 hover:text-white transition duration-300">Volver</a>
+                    <button type="submit" class="w-auto px-5 h-10 mb-5 bg-purple-500 text-white font-semibold border border-indigo rounded-md hover:bg-purple-900 hover:text-white transition duration-300">Agregar Pedido</button>                            
+                </div>
+        </div>
+        <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-4"> <!-- Grid con 3 columnas y gap de 6 -->
             <!-- Detalles de la venta -->
             <div class="col-span-1 bg-white">
-                <div class="bg-blue-500 text-white text-center py-2 rounded-t-md">
+                <div class="bg-gray-200 text-gray-800 text-center py-2 rounded-t-md">
                     Detalles de la venta
                 </div>
                 <div class="p-6 rounded-b-md shadow-md">
@@ -125,7 +132,7 @@
 
 
             <div class="col-span-1 bg-white">
-                <div class="bg-blue-500 text-white text-center py-2 rounded-t-md">
+                <div class="bg-gray-200 text-gray-800 text-center py-2 rounded-t-md">
                     Datos generales
                 </div>
                 <div class="p-6 border rounded-b-md shadow-md">
@@ -134,7 +141,7 @@
                         <!-- Número de comprobante -->
                         <div>
                             <label for="nombre_cliente" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
-                            <input required type="text" name="nombre_cliente" id="nombre_cliente" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
+                            <input type="text" name="nombre_cliente" id="nombre_cliente" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                             @error('numero_comprobante')
                                 <small class="text-red-500">{{ '*'.$message }}</small>
                             @enderror
@@ -143,7 +150,7 @@
                         <!-- Número de comprobante -->
                         <div>
                             <label for="numero_comprobante" class="block text-sm font-medium text-gray-700">Tipo de Envío</label>
-                            <input required type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
+                            <input type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white  border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                             @error('numero_comprobante')
                                 <small class="text-red-500">{{ '*'.$message }}</small>
                             @enderror
@@ -165,7 +172,7 @@
                         <!-- Número de comprobante -->
                         <div>
                             <label for="numero_comprobante" class="block text-sm font-medium text-gray-700">Número de comprobante</label>
-                            <input required type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
+                            <input type="text" name="numero_comprobante" id="numero_comprobante" class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition duration-300">
                             @error('numero_comprobante')
                                 <small class="text-red-500">{{ '*'.$message }}</small>
                             @enderror
@@ -177,9 +184,11 @@
                             <select name="fk_id_descuento" id="descuento_id" class="peer block w-full appearance-none rounded-LG border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                                 <option value="" disabled selected> -</option>
                                 @foreach ($Descuentos as $descuento)
+                                    @if($descuento->fk_id_estado == 1)
                                     <option value="{{$descuento->id_descuento}}">
                                         {{$descuento->codigo_de_descuento}} - {{$descuento->porcentaje_descuento}}%
                                     </option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -227,7 +236,7 @@
 
                         <!-- Botón para guardar -->
                         <div class="text-center">
-                            <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded-md shadow hover:bg-green-600 transition">
+                            <button type="submit" class="px-6 py-2 bg-purple-500 text-white rounded-md shadow hover:bg-purple-600 transition">
                                 Realizar venta
                             </button>
                         </div>
@@ -312,15 +321,14 @@
                     sumas += subtotal[cont];
                     igv = round(sumas / 100 * impuesto);
                     total = round(sumas + igv);
-
                     //Crear la fila
                     let fila = '<tr id="fila' + cont + '">' +
                         '<th>' + (cont + 1) + '</th>' +
                         '<td><input type="hidden" name="arrayidproducto[]" value="' + idProducto + '">' + nameProducto + '</td>' +
                         '<td><input type="hidden" name="arraycantidad[]" value="' + cantidad + '">' + cantidad + '</td>' +
-                        '<td><input type="hidden" name="arrayprecioventa[]" value="' + precioVenta + '">' + precioVenta + '</td>' +
-                        '<td><input type="hidden" name="arraydescuento[]" value="' + descuento + '">' + descuento + '</td>' +
-                        '<td>' + subtotal[cont] + '</td>' +
+                        '<td><input type="hidden" name="arrayprecioventa[]" value="' + precioVenta + '"> ₡' + parseFloat(precioVenta).toLocaleString('es-CR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '</td>' +                        
+                        '<td><input type="hidden" name="arraydescuento[]" value="₡' + descuento + '">₡' + parseFloat(descuento).toLocaleString('es-CR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '</td>' +
+                        '<td>₡' + parseFloat(subtotal[cont]).toLocaleString('es-CR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '</td>' +
                         '<td><button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-700 transition" type="button" onClick="eliminarProducto(' + cont + ')"><i class="fa-solid fa-trash"></i></button></td>' +
                         '</tr>';
 

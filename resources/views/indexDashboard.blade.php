@@ -1,7 +1,7 @@
 <?php
 $sumaTotales = 0;
 foreach($pedidos as $pedido) {
-   $sumaTotales += $pedido->subtotal_pedido;
+   $sumaTotales += $pedido->total_pedido;
 }
 ?>
 
@@ -33,7 +33,7 @@ foreach($pedidos as $pedido) {
                 </div>
                 <div class="ml-4">
                     <h2 class="text-lg font-semibold text-gray-700">Ventas Totales</h2>
-                    <p class="text-2xl font-bold text-gray-800">₡{{ $sumaTotales }}</p>
+                    <p class="text-2xl font-bold text-gray-800">₡{{ number_format($sumaTotales, 0, '.', ',') }}</p>
                 </div>
             </div>
         </div>

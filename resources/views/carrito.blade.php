@@ -29,12 +29,13 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($Carrito as $producto)
                 <tr class="border-b border-gray-200">
                     <td class="py-2">
                         <div class="flex items-center">
                             <img src="https://shoelab.cr/wp-content/uploads/2024/09/hf8833-100_1.jpg" alt="Producto 1" class="w-40 h-40 object-cover rounded-lg">
                             <div class="ml-4">
-                                <h3 class="text-lg font-semibold">Producto 1</h3>
+                                <h3 class="text-lg font-semibold">{{ $producto->nombre_producto }}/h3>
                                 <p class="text-gray-600">Talla: 7</p>
                                 <p class="text-gray-600">Descripción:</p>
                             </div>
@@ -56,6 +57,7 @@
                     </td>
                     <td class="py-2 text-center">$99.99</td>
                 </tr>
+                @endforeach
                 <tr class="border-b border-gray-200">
                     <td class="py-2">
                         <div class="flex items-center">

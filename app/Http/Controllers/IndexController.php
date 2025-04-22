@@ -20,6 +20,19 @@ class IndexController extends Controller{
 
         return view('indexDashboard', compact('active', 'productos', 'pedidos'));
     }
+
+    public function buscarAll(){
+        $Productos = Producto::all();
+        $active = "inicio";
+
+        return view('buscar', compact('active', 'Productos'));
+    }
+
+    public function mostrarProducto($id_producto){
+        $Producto = Producto::findOrFail($id_producto);
+
+        return view('producto', compact( 'Producto'));
+    }
 }
 
 
