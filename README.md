@@ -1,66 +1,67 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proyecto de Gestión de Pedidos con Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto es una aplicación web desarrollada con Laravel para gestionar pedidos, roles, permisos, productos y más. A continuación, se detallan los pasos necesarios para configurar y ejecutar este proyecto en cualquier computadora con Windows.
 
-## About Laravel
+---
+## **Requisitos previos**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Antes de comenzar, asegúrate de que tu computadora cumpla con los siguientes requisitos:
+1. **PHP**: Versión 8.3.2. 
+https://windows.php.net/download#php-8.3 - VS16 x64 Thread Safe (2025-Apr-08 22:21:18)
+2. **Composer**: Administrador de dependencias para PHP - Version 2.8.6.
+https://getcomposer.org/download/    
+3. **Git Bash** : Para clonar el repositorio.
+4. **Base de datos Oracle**: Configurada y accesible en el puerto 1521 .
+Instalar InstantClient_23_7.  Basic Usage y SDK files
+1. **Servidor web**: Apache o Nginx (puedes usar XAMPP o Laragon para simplificar).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
+## **Pasos para configurar el proyecto**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### **1. Descargar Oracle Instant Cliente 23_7, SQl*Plus Package, SDK Package . Tener instalado Oracle Database 21C. Para el uso e instalaciones de la base de datos.
+La información de la base de datos se encuentra el archivo proyecto.sql para la instalación de la base de datos en SQL Developer.
+Instalar el archivo proyecto.sql e instalar la base de datos.
 
-## Learning Laravel
+### **2. Instalar Composer para las dependencias y paquetes**
+https://getcomposer.org/download/    
+Nota: Apuntar la ruta de instalaciones a la carpeta de PHP con la Version 2.8.6. C:/XAMPP/PHP/PHP.EXE         
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Comprobar que esta instalado, corriéndo el comando.
+composer —v   
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### **3. Clonar el repositorio**
+Clonamos el repositorio en tu computadora desde gitbash:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+git clone https://github.com/karaya10824/sc502-1c2025-g1.git    
 
-## Laravel Sponsors
+### **4. Configuración inicial** 
+Buscamos el archivo resources.zip en la carpeta raíz de nuestro proyecto, y copiaremos los archivos menos env, donde tenemos instalado las dependencias y librerías. 
+Córremeos el siguiente comando si no sabemos donde tenemos ubicado el servicio de php. 
+php --ini 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Cuando lo identifiquémos el archivo php.ini, lo vamos a abrir para seleccionar las extensiones que necesitamos para nuestro proyecto. Buscamos las siguientes y le eliminamos el ;
+extension=fileinfo
+extension=exif
+extension=sodium          
 
-### Premium Partners
+### **5. Actualizamos e instalamos dependencias necesarias para correr este proyecto**
+Luego dirigirnos a la carpeta del repositorio clonado por terminal y corremos los comandos.
+composer update
+composer Install 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### **6. Conectamos el proyecto con nuestra base de datos corriéndo en el puerto 1521*
+Ir al archivo .env (Si no esta, crear archivo .env, irse a recursos y abrir el archivo env, se copia y pega en el archivo de nuestro proyecto) y configurar la linea 23 con la información de la base de datos Oracle.
+DB_CONNECTION=oracle
+DB_HOST=127.0.0.1
+DB_PORT=1521
+DB_SERVICE_NAME=ORCLCDB
+DB_USERNAME=FIDE_TECHLAB_USER
+DB_PASSWORD=FIDE_TECHLAB_USER
 
-## Contributing
+### **7. Creamos las tablas faltantes para los permisos, usuarios e imágenes.**
+ php artisan migrate
+ php artisan db:seed
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### **8. Final. Corremos el siguiente comando y podremos abrir el proyecto en nuestro navegador con la url. localhost:8000
+php artisan serve
